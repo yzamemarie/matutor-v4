@@ -5,23 +5,26 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
+
 import androidx.core.view.GravityCompat;
 
 import com.example.matutor.databinding.ActivityDashboardBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.google.firebase.firestore.FirebaseFirestore;
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ActivityDashboardBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +43,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         binding.navView.setNavigationItemSelectedListener(this);
-
-        //switch profile type
-        binding.switchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), DashboardTutor.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
-                finish();
-            }
-        });
-
 
         binding.bottomNavigator.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -85,6 +76,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             }
         });
     }
+
+
     //sidemenu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

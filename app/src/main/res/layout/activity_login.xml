@@ -48,8 +48,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="email"
                 app:hintTextColor="@android:color/darker_gray"
-                app:boxStrokeWidthFocused="2dp"
-                app:passwordToggleEnabled="true">
+                app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"

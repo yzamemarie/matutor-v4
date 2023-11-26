@@ -58,16 +58,24 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regFirstnameInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:singleLine="true"
-                    android:textColor="@color/text_grey"
-                    android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regFirstnameInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:textColor="@color/text_grey"
+                        android:textSize="18sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -91,15 +99,23 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/regLastnameInput"
-                        android:layout_width="320dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:background="@color/white"
-                        android:singleLine="true"
-                        android:textColor="@color/text_grey"
-                        android:textSize="18sp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:boxStrokeWidthFocused="2dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/regLastnameInput"
+                            android:layout_width="320dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:background="@color/white"
+                            android:singleLine="true"
+                            android:textColor="@color/text_grey"
+                            android:textSize="18sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </FrameLayout>
 
             </LinearLayout>
@@ -118,17 +134,26 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regEmailInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:singleLine="true"
-                    android:textColor="@color/text_grey"
-                    android:textSize="18sp"
-                    android:enabled="false"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regEmailInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:textColor="@color/text_grey"
+                        android:textSize="18sp"
+                        android:enabled="false"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
 
             <!--PASSWORD FRAME-->
@@ -146,19 +171,25 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regPasswordInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="#FFFF"
-                    android:drawablePadding="8dp"
-                    android:inputType="textPassword"
-                    android:textColorHint="@android:color/darker_gray"
-                    android:singleLine="true"
-                    android:enabled="false"/>
+                    app:boxStrokeWidthFocused="2dp"
+                    app:passwordToggleEnabled="true">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regPasswordInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:background="#FFFF"
+                        android:drawablePadding="8dp"
+                        android:inputType="textPassword"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:singleLine="true"
+                        android:enabled="false"/>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <!--CONFIRM PASSWORD-->
@@ -176,18 +207,25 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regConfirmPasswordInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="#FFFF"
-                    android:drawablePadding="8dp"
-                    android:inputType="textPassword"
-                    android:textColorHint="@android:color/darker_gray"
-                    android:singleLine="true"
-                    android:enabled="false"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regConfirmPasswordInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:background="#FFFF"
+                        android:drawablePadding="8dp"
+                        android:inputType="textPassword"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:singleLine="true"
+                        android:enabled="false"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -264,16 +302,23 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regContactInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:singleLine="true"
-                    android:textColor="@color/text_grey"
-                    android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regContactInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:textColor="@color/text_grey"
+                        android:textSize="18sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -291,16 +336,22 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regAddressInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:singleLine="true"
-                    android:textColor="@color/text_grey"
-                    android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regAddressInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:textColor="@color/text_grey"
+                        android:textSize="18sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -318,16 +369,24 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regGuardianNameInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:singleLine="true"
-                    android:textColor="@color/text_grey"
-                    android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regGuardianNameInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:textColor="@color/text_grey"
+                        android:textSize="18sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -344,16 +403,23 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regGuardianEmailInput"
-                    android:layout_width="320dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:singleLine="true"
-                    android:textColor="@color/text_grey"
-                    android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:boxStrokeWidthFocused="2dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/regGuardianEmailInput"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:textColor="@color/text_grey"
+                        android:textSize="18sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <!--interest onward-->
@@ -397,51 +463,18 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal">
 
-                        <LinearLayout
+                       <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal">
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:text="TOPIC 1"
-                                android:textColor="@android:color/darker_gray"
-                                android:textSize="10sp"
-                                android:backgroundTint="@color/white"/>
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:text="TOPIC 2"
-                                android:textColor="@android:color/darker_gray"
-                                android:textSize="10sp"
-                                android:backgroundTint="@color/white"/>
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:text="TOPIC 3"
-                                android:textColor="@android:color/darker_gray"
-                                android:textSize="10sp"
-                                android:backgroundTint="@color/white"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="45dp">
+                            android:layout_height="wrap_content">
 
                             <EditText
                                 android:id="@+id/editTagText"
                                 android:layout_width="220dp"
                                 android:layout_height="wrap_content"
                                 android:hint="enter tag"
+                                android:inputType="text"
                                 android:textColor="@color/text_grey"
-                                android:textColorHint="@android:color/darker_gray"
-                                android:inputType="text"/>
+                                android:textColorHint="@android:color/darker_gray" />
 
                             <Button
                                 android:id="@+id/addTagButton"
@@ -453,6 +486,32 @@
                         </LinearLayout>
                     </FrameLayout>
 
+                    <LinearLayout
+                        android:id="@+id/tagButtonsFrame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal">
+
+                        <Button
+                            android:id="@+id/newTagButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@color/white"
+                            android:text="ADD TAG"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tagButtonsFrame2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

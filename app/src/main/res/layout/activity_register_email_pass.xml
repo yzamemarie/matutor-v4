@@ -83,18 +83,25 @@
                 android:textColor="@color/text_grey"
                 android:textSize="16sp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/regPasswordInput"
-                android:layout_width="320dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:background="@color/white"
-                android:singleLine="true"
-                android:textColor="@color/text_grey"
-                android:textSize="18sp"
-                android:inputType="textPassword"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:boxStrokeWidthFocused="2dp"
+                app:passwordToggleEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regPasswordInput"
+                    android:layout_width="320dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    android:singleLine="true"
+                    android:textColor="@color/text_grey"
+                    android:textSize="18sp"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -113,18 +120,26 @@
                 android:textColor="@color/text_grey"
                 android:textSize="16sp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/regConfirmPasswordInput"
-                android:layout_width="320dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:background="@color/white"
-                android:singleLine="true"
-                android:textColor="@color/text_grey"
-                android:textSize="18sp"
-                android:inputType="textPassword"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:boxStrokeWidthFocused="2dp"
+                app:passwordToggleEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regConfirmPasswordInput"
+                    android:layout_width="320dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    android:singleLine="true"
+                    android:textColor="@color/text_grey"
+                    android:textSize="18sp"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <!--BUTTONS-->

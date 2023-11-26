@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,9 +14,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityRegisterInfoBinding;
@@ -41,11 +46,11 @@ import java.util.Map;
 
 public class RegisterInfo extends AppCompatActivity {
 
-    //private static final int PERMISSION_CAMERA = 1;
-    //private static final int PERMISSION_GALLERY = 2;
     private static final int SELECT_ID_FRONT = 3;
     private static final int SELECT_ID_BACK = 4;
     private static final int SELECT_SELFIE = 5;
+    private static final int MAX_TAGS = 5; //max number of tags allowed
+    private List<String> tagsList = new ArrayList<>();//string to hold tags
 
     ActivityRegisterInfoBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -90,7 +95,15 @@ public class RegisterInfo extends AppCompatActivity {
         binding.addTagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Topic added.", Toast.LENGTH_SHORT).show();
+                String tag = binding.editTagText.getText().toString().trim();
+
+                if (!tag.isEmpty() && tagsList.size() < MAX_TAGS) {
+                    tagsList.add(tag);
+                    updateTagButtons();
+                    binding.editTagText.getText().clear();
+                } else if (tagsList.size() > MAX_TAGS){
+                    Toast.makeText(getApplicationContext(), "Maximum number of tags added.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -173,22 +186,23 @@ public class RegisterInfo extends AppCompatActivity {
                                     String uid = auth.getCurrentUser().getUid();
                                     if (uid != null) {
                                         //create user document for firestore
-                                        Map<String, Object> learnerMap = new HashMap<>();
-                                        learnerMap.put("learnerUid", uid);
-                                        learnerMap.put("learnerFirstname", learnerFirstname);
-                                        learnerMap.put("learnerLastname", learnerLastname);
-                                        learnerMap.put("learnerEmail", learnerEmail);
-                                        learnerMap.put("learnerPassword", learnerPassword);
-                                        learnerMap.put("learnerBdate", learnerBdate);
-                                        learnerMap.put("learnerAge", learnerAge);
-                                        learnerMap.put("learnerContact", learnerContact);
-                                        learnerMap.put("learnerAddress", learnerAddress);
-                                        learnerMap.put("learnerGuardianName", learnerGuardianName);
-                                        learnerMap.put("learnerGuardianEmail", learnerGuardianEmail);
+                                        Map<String, Object> learnerData = new HashMap<>();
+                                        learnerData.put("learnerUid", uid);
+                                        learnerData.put("learnerFirstname", learnerFirstname);
+                                        learnerData.put("learnerLastname", learnerLastname);
+                                        learnerData.put("learnerEmail", learnerEmail);
+                                        learnerData.put("learnerPassword", learnerPassword);
+                                        learnerData.put("learnerBdate", learnerBdate);
+                                        learnerData.put("learnerAge", learnerAge);
+                                        learnerData.put("learnerContact", learnerContact);
+                                        learnerData.put("learnerAddress", learnerAddress);
+                                        learnerData.put("learnerTag", tagsList);
+                                        learnerData.put("learnerGuardianName", learnerGuardianName);
+                                        learnerData.put("learnerGuardianEmail", learnerGuardianEmail);
 
                                         firestore.collection("user_learner")
                                                 .document(learnerEmail)  // Use learnerEmail as the document ID
-                                                .set(learnerMap)
+                                                .set(learnerData)
                                                 .addOnSuccessListener(aVoid -> {
                                                     binding.regFirstnameInput.getText().clear();
                                                     binding.regLastnameInput.getText().clear();
@@ -233,22 +247,23 @@ public class RegisterInfo extends AppCompatActivity {
         binding.loginHereButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
+                cancelConfirmation();
             }
         });
     }
 
     @Override
     public void onBackPressed() {
+        cancelConfirmation();
+    }
+
+    public void cancelConfirmation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Go back?");
+        builder.setMessage("Cancel registration?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(getApplicationContext(), RegisterEmailPass.class));
+                startActivity(new Intent(getApplicationContext(), Login.class));
                 overridePendingTransition(0, 0);
                 finishAffinity();
                 System.exit(0);
@@ -261,6 +276,43 @@ public class RegisterInfo extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void updateTagButtons() {
+        LinearLayout tagButtonsFrame = findViewById(R.id.tagButtonsFrame);
+        LinearLayout tagButtonsFrame2 = findViewById(R.id.tagButtonsFrame2);
+        tagButtonsFrame.removeAllViews();
+        tagButtonsFrame2.removeAllViews();
+
+        int maxButtonsPerRow = 3;
+
+        for (int i = 0; i < Math.min(tagsList.size(), 5); i++) {
+            LinearLayout targetLayout = (i < maxButtonsPerRow) ? tagButtonsFrame : tagButtonsFrame2;
+
+            Button tagButton = new Button(this);
+            tagButton.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tagButton.setText(tagsList.get(i));
+            tagButton.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tagButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+            tagButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+
+            tagButton.setId(View.generateViewId());
+
+            tagButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tagsList.remove(tagButton.getText().toString());
+                    updateTagButtons();
+                }
+            });
+
+            targetLayout.addView(tagButton);
+        }
+
+        binding.editTagText.setText("");
     }
 
     private void showDatePickerDialog() {

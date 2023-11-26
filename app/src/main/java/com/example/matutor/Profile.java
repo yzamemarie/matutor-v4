@@ -8,11 +8,16 @@ import androidx.core.view.GravityCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityProfileBinding;
@@ -24,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class Profile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,6 +67,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                         .addOnSuccessListener(documentSnapshot -> {
                             if (documentSnapshot.exists()) {
                                 Picasso picasso = new Picasso.Builder(getApplicationContext()).build();
+
                                 if (documentSnapshot.contains("learnerProfilePicture")) {
                                     String profilePicUrl = documentSnapshot.getString("learnerProfilePicture");
                                     if (!TextUtils.isEmpty(profilePicUrl)) {
@@ -112,6 +120,9 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                                 if (!TextUtils.isEmpty(guardianEmail)) {
                                     binding.guardianEmailDetails.setText(guardianEmail);
                                 }
+
+                                List<String> postTags = (List<String>) documentSnapshot.get("learnerTag");
+                                displayPostTags(postTags);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Document does not exist for learnerEmail: " + learnerEmail, Toast.LENGTH_SHORT).show();
                             }
@@ -119,14 +130,13 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                         .addOnFailureListener(e -> {
                             Toast.makeText(getApplicationContext(), "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
+
             } else {
                 Toast.makeText(getApplicationContext(), "Learner email is empty", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(getApplicationContext(), "User not authenticated", Toast.LENGTH_SHORT).show();
         }
-
-
 
         //click to edit user profile
         binding.editProfileButton.setOnClickListener(new View.OnClickListener() {
@@ -244,5 +254,46 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         });
         builder.setNegativeButton("No", null);
         builder.show();
+    }
+
+    private void displayPostTags(List<String> postTags) {
+        LinearLayout tagInterestFrame = findViewById(R.id.tagInterestFrame);
+        LinearLayout tagInterestFrame2 = findViewById(R.id.tagInterestFrame2);
+
+        // Clear existing buttons and layouts
+        tagInterestFrame.removeAllViews();
+        tagInterestFrame2.removeAllViews();
+
+        int maxButtonsPerRow = 3;
+
+        for (int i = 0; i < Math.min(postTags.size(), maxButtonsPerRow); i++) {
+            Button userInterestTag = createTagButton(postTags.get(i));
+            tagInterestFrame.addView(userInterestTag);
+        }
+
+        for (int i = maxButtonsPerRow; i < postTags.size(); i++) {
+            Button userInterestTag = createTagButton(postTags.get(i));
+            tagInterestFrame2.addView(userInterestTag);
+        }
+    }
+
+    private Button createTagButton(String tagText) {
+        Button userInterestTag = new Button(this);
+        userInterestTag.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        userInterestTag.setText(tagText);
+        userInterestTag.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        userInterestTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        userInterestTag.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        userInterestTag.setId(View.generateViewId());
+
+        // Set onClickListener for the dynamically created tag button
+        userInterestTag.setOnClickListener(v -> {
+            Toast.makeText(this, "You are interested in  " + tagText.toUpperCase(), Toast.LENGTH_SHORT).show();
+        });
+
+        return userInterestTag;
     }
 }
