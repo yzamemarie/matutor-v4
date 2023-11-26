@@ -1,4 +1,4 @@
-package data_models;
+package models;
 
 public class users_model {
 }

@@ -2,4 +2,6 @@
     <string name="app_name">Matutor</string>
     <string name="drawer_open">Opens Drawer</string>
     <string name="drawer_close">Closes Drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

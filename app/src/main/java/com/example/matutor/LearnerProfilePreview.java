@@ -59,7 +59,7 @@ public class LearnerProfilePreview extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getApplicationContext(), NotificationTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Notification.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();

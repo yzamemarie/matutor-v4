@@ -1,4 +1,4 @@
-package data_models;
+package models;
 
 public class posting_model {
 }

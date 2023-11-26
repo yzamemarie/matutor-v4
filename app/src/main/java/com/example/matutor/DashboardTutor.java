@@ -88,7 +88,7 @@ public class DashboardTutor extends AppCompatActivity {
                     return true;
                 }
                 else if (itemId == R.id.notif) {
-                    startActivity(new Intent(getApplicationContext(), NotificationTutor.class));
+                    startActivity(new Intent(getApplicationContext(), Notification.class));
                     overridePendingTransition(0, 0);
                     return true;
                 }
