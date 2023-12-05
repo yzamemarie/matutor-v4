@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/createdPostCard"
         android:layout_width="380dp"

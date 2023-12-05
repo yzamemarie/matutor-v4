@@ -63,6 +63,7 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
         postAdapter = new createdPost_adapter(new ArrayList<>());
         binding.createdPostingRecyclerView.setAdapter(postAdapter);
 
+
         // Fetch and display the created post data
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {

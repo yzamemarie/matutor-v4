@@ -19,7 +19,6 @@ import models.createPost_model;
 
 public class createdPost_adapter extends RecyclerView.Adapter<createdPost_adapter.PostViewHolder> {
     private List<createPost_model> createdPostList;
-
     static class PostViewHolder extends RecyclerView.ViewHolder {
         private final ListCreatedPostsBinding createBinding;
 

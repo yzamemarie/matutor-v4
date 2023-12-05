@@ -86,6 +86,7 @@ public class createPost_model implements Parcelable {
         return learnerLastname;
     }
 
+
     // Fetch created post data from Firestore
     public static List<createPost_model> getCreatedPostListFromFirestore() {
         CollectionReference createdPostCollection = FirebaseFirestore.getInstance()

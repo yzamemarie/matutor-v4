@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp">
 
+
                 <TextView
                     android:id="@+id/typeTextView"
                     android:layout_width="wrap_content"
