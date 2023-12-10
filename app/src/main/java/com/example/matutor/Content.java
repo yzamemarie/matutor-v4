@@ -4,35 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.MediaController;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.example.matutor.databinding.ActivityContentBinding;
-import com.example.matutor.databinding.ActivityDashboardBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Content extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -150,7 +135,7 @@ public class Content extends AppCompatActivity implements NavigationView.OnNavig
             return true;
         }
         else if (itemId == R.id.side_progReports) {
-            startActivity(new Intent(getApplicationContext(), ViewProgressReportsLearner.class));
+            startActivity(new Intent(getApplicationContext(), ViewProgressReports.class));
             return true;
         }
         else if (itemId == R.id.side_yourPostings) {

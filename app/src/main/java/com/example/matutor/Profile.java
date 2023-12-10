@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -21,12 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityProfileBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -211,7 +208,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             return true;
         }
         else if (itemId == R.id.side_progReports) {
-            startActivity(new Intent(getApplicationContext(), ViewProgressReportsLearner.class));
+            startActivity(new Intent(getApplicationContext(), ViewProgressReports.class));
             return true;
         }
         else if (itemId == R.id.side_yourPostings) {

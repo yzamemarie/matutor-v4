@@ -11,20 +11,21 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class ReviewLearner extends AppCompatActivity {
+import com.example.matutor.databinding.ActivityCreateReviewBinding;
 
+public class CreateReview extends AppCompatActivity {
+
+    ActivityCreateReviewBinding binding;
     Button close, postReview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        setContentView(R.layout.activity_review_learner);
-
-        close = findViewById(R.id.closeButton);
-        postReview = findViewById(R.id.postReviewButton);
+        binding = ActivityCreateReviewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //close review page
-        close.setOnClickListener(new View.OnClickListener() {
+        binding.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 closeConfirmation();
@@ -32,11 +33,11 @@ public class ReviewLearner extends AppCompatActivity {
         });
 
         //switch user type
-        postReview.setOnClickListener(new View.OnClickListener() {
+        binding.postReviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Review posted!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), BookingsTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Bookings.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 finish();
@@ -60,7 +61,7 @@ public class ReviewLearner extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getApplicationContext(), BookingsTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Bookings.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();

@@ -11,26 +11,25 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.matutor.databinding.ActivityPremiumSubBinding;
+
 public class PremiumSub extends AppCompatActivity {
 
-    Button close, payment;
+    ActivityPremiumSubBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        setContentView(R.layout.activity_premium_sub);
-
-        //assignment
-        close = findViewById(R.id.closeButton);
-        payment = findViewById(R.id.subPaymentButton);
+        binding = ActivityPremiumSubBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //payment button
-        payment.setOnClickListener(new View.OnClickListener() {
+        binding.subPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Congratulations! You are now a premium user!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), ProfileTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Profile.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
                 finish();
@@ -38,10 +37,10 @@ public class PremiumSub extends AppCompatActivity {
         });
 
         //close and return to dashboard
-        close.setOnClickListener(new View.OnClickListener() {
+        binding.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), DashboardTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
                 finish();
@@ -52,7 +51,7 @@ public class PremiumSub extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), ProfileTutor.class);
+        Intent intent = new Intent(getApplicationContext(), Profile.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();

@@ -27,7 +27,7 @@
             android:name=".ViewProgressReportTutor"
             android:exported="false" />
         <activity
-            android:name=".ViewProgressReportsLearner"
+            android:name=".ViewProgressReports"
             android:exported="false" />
         <activity
             android:name=".Notification"
@@ -51,7 +51,7 @@
             android:name=".BookingsHistory"
             android:exported="false" />
         <activity
-            android:name=".LearnerProfilePreview"
+            android:name=".UserProfilePreview"
             android:exported="false" />
         <activity
             android:name=".ViewAllLearners"
@@ -72,7 +72,7 @@
             android:name=".ReviewTutor"
             android:exported="false" />
         <activity
-            android:name=".ReviewLearner"
+            android:name=".CreateReview"
             android:exported="false" />
         <activity
             android:name=".ViewCreatedPosts"

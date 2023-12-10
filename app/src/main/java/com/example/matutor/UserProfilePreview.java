@@ -10,20 +10,24 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-public class LearnerProfilePreview extends AppCompatActivity {
+import com.example.matutor.databinding.ActivityUserPreviewBinding;
 
+public class UserProfilePreview extends AppCompatActivity {
+
+    ActivityUserPreviewBinding binding;
     Button accept, reject, close;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        setContentView(R.layout.activity_learner_profile_preview);
+        binding = ActivityUserPreviewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         accept = findViewById(R.id.acceptButton);
         reject = findViewById(R.id.rejectButton);
         close = findViewById(R.id.closeButton);
 
-        accept.setOnClickListener(new View.OnClickListener() {
+        binding.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ScheduleSession.class);
@@ -33,17 +37,17 @@ public class LearnerProfilePreview extends AppCompatActivity {
             }
         });
 
-        reject.setOnClickListener(new View.OnClickListener() {
+        binding.rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rejectConfirmation();
             }
         });
 
-        close.setOnClickListener(new View.OnClickListener() {
+        binding.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), DashboardTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
                 finish();
@@ -75,7 +79,7 @@ public class LearnerProfilePreview extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), DashboardTutor.class);
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
         finish();

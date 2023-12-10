@@ -18,54 +18,49 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.matutor.databinding.ActivityScheduleSessionBinding;
+
 import java.util.Calendar;
 
 public class ScheduleSession extends AppCompatActivity {
 
-    Button close, schedule;
-    Spinner modeSpinner;
-    EditText editDate, editSessionRate, editTimeStart, editTimeEnd;
+    ActivityScheduleSessionBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        setContentView(R.layout.activity_schedule_session);
+        binding = ActivityScheduleSessionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        close = findViewById(R.id.closeButton);
-        schedule = findViewById(R.id.scheduleButton);
-        modeSpinner = findViewById(R.id.modeOfTutorSpinner);
-        editDate = findViewById(R.id.editDateText);
-        editTimeStart = findViewById(R.id.editTimeStartText);
-        editTimeEnd = findViewById(R.id.editTimeEndText);
 
         // Populate the Spinner with an array of items
         String[] items = {"Face-to-Face (F2F)", "Virtual (via Google Meet, Zoom, etc.)"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        modeSpinner.setAdapter(adapter);
+        binding.modeOfTutorSpinner.setAdapter(adapter);
 
-        editDate.setOnClickListener(new View.OnClickListener() {
+        binding.editDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDatePickerDialog();
             }
         });
 
-        editTimeStart.setOnClickListener(new View.OnClickListener() {
+        binding.editTimeStartText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTimeStartPickerDialog();
             }
         });
 
-        editTimeEnd.setOnClickListener(new View.OnClickListener() {
+        binding.editTimeEndText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTimeEndPickerDialog();
             }
         });
 
-        schedule.setOnClickListener(new View.OnClickListener() {
+        binding.scheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Schedule set!", Toast.LENGTH_SHORT).show();
@@ -76,7 +71,7 @@ public class ScheduleSession extends AppCompatActivity {
             }
         });
 
-        close.setOnClickListener(new View.OnClickListener() {
+        binding.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 closeConfirmation();
@@ -86,7 +81,7 @@ public class ScheduleSession extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), TutorProfilePreview1.class);
+        Intent intent = new Intent(getApplicationContext(), UserProfilePreview.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
         finish();
@@ -102,7 +97,7 @@ public class ScheduleSession extends AppCompatActivity {
                 this,
                 (view, yearSelected, monthOfYear, dayOfMonth) -> {
                     String selectedDate = (monthOfYear + 1) + "/" + dayOfMonth + "/" + yearSelected;
-                    editDate.setText(selectedDate);
+                    binding.editDateText.setText(selectedDate);
                 },
                 year, month, day);
 
@@ -120,7 +115,7 @@ public class ScheduleSession extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String selectedTime = String.format("%02d:%02d", hourOfDay, minute);
-                        editTimeStart.setText(selectedTime);
+                        binding.editTimeStartText.setText(selectedTime);
                     }
                 }, hour, minute, true);
 
@@ -138,7 +133,7 @@ public class ScheduleSession extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String selectedTime = String.format("%02d:%02d", hourOfDay, minute);
-                        editTimeEnd.setText(selectedTime);
+                        binding.editTimeEndText.setText(selectedTime);
                     }
                 }, hour, minute, true);
 

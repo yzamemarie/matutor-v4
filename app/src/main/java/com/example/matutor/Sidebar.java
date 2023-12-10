@@ -31,7 +31,7 @@ public class Sidebar extends AppCompatActivity {
         //fetch user first name and last name
         String uid = auth.getCurrentUser().getUid();
         if (!uid.isEmpty()) {
-            firestore.collection("learner")
+            firestore.collection("user_learner")
                     .document(uid)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -48,14 +48,16 @@ public class Sidebar extends AppCompatActivity {
                                 }
 
                                 String lastname = documentSnapshot.getString("learnerLastname");
-                                if (!lastname.isEmpty()) {
-                                    binding.userLastName.setText(lastname);
+                                String firstname = documentSnapshot.getString("learnerFirstname");
+                                if (!lastname.isEmpty() && !!firstname.isEmpty()) {
+                                    String fullname = firstname + " " + lastname;
+                                    binding.userFullnameTextView.setText(fullname);
+                                } else if (lastname.isEmpty()) {
+                                    Toast.makeText(getApplicationContext(), "Last name is empty.", Toast.LENGTH_SHORT).show();
+                                } else if (firstname.isEmpty()) {
+                                    Toast.makeText(getApplicationContext(), "first name is empty.", Toast.LENGTH_SHORT).show();
                                 }
 
-                                String firstname = documentSnapshot.getString("learnerFirstname");
-                                if (!firstname.isEmpty()) {
-                                    binding.userFirstName.setText(firstname);
-                                }
                             }
                         }
                     })

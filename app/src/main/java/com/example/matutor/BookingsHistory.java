@@ -9,15 +9,10 @@ import androidx.core.view.GravityCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityBookingsHistoryBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,16 +38,7 @@ public class BookingsHistory extends AppCompatActivity implements NavigationView
         toggle.syncState();
         binding.navView.setNavigationItemSelectedListener(this);
 
-        //switch user type
-        binding.switchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), BookingsHistoryTutor.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
-                finish();
-            }
-        });
+
 
         binding.bottomNavigator.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -115,7 +101,7 @@ public class BookingsHistory extends AppCompatActivity implements NavigationView
             return true;
         }
         else if (itemId == R.id.side_progReports) {
-            startActivity(new Intent(getApplicationContext(), ViewProgressReportsLearner.class));
+            startActivity(new Intent(getApplicationContext(), ViewProgressReports.class));
             return true;
         }
         else if (itemId == R.id.side_yourPostings) {

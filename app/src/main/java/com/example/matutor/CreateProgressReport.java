@@ -11,31 +11,31 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class CreateProgressReport extends AppCompatActivity {
+import com.example.matutor.databinding.ActivityCreatePostingBinding;
+import com.example.matutor.databinding.ActivityCreateProgressReportBinding;
 
-    Button close, send;
+public class CreateProgressReport extends AppCompatActivity {
+    ActivityCreateProgressReportBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        setContentView(R.layout.activity_create_progress_report);
-
-        close = findViewById(R.id.closeButton);
-        send = findViewById(R.id.sendReportButton);
+        binding = ActivityCreateProgressReportBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //close review page
-        close.setOnClickListener(new View.OnClickListener() {
+        binding.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 closeConfirmation();
             }
         });
 
-        send.setOnClickListener(new View.OnClickListener() {
+        binding.sendReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Progress report sent!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), ReviewLearner.class);
+                Intent intent = new Intent(getApplicationContext(), CreateReview.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 finish();
@@ -46,7 +46,7 @@ public class CreateProgressReport extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), BookingsTutor.class);
+        Intent intent = new Intent(getApplicationContext(), Bookings.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();
@@ -59,7 +59,7 @@ public class CreateProgressReport extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getApplicationContext(), BookingsTutor.class);
+                Intent intent = new Intent(getApplicationContext(), Bookings.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();

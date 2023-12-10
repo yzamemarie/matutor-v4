@@ -5,11 +5,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
@@ -91,7 +89,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             return true;
         }
         else if (itemId == R.id.side_progReports) {
-            startActivity(new Intent(getApplicationContext(), ViewProgressReportsLearner.class));
+            startActivity(new Intent(getApplicationContext(), ViewProgressReports.class));
             return true;
         }
         else if (itemId == R.id.side_yourPostings) {

@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -42,51 +41,7 @@ public class Bookings extends AppCompatActivity implements NavigationView.OnNavi
         toggle.syncState();
         binding.navView.setNavigationItemSelectedListener(this);
 
-        //switch user type
-        binding.switchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), BookingsTutor.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
-                finish();
-            }
-        });
 
-        //review tutor 1
-        binding.reviewTutorButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ReviewTutor.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
-                finish();
-            }
-        });
-
-        //cancel session 1
-        binding.cancelTutorSessionButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancelSessionConfirmation();
-            }
-        });
-
-        //finish session 2 -- disabled
-        binding.reviewTutorButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Incomplete session!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //cancel session 2
-        binding.cancelTutorSessionButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancelSessionConfirmation();
-            }
-        });
 
         //navbar navigation
         binding.bottomNavigator.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -136,7 +91,7 @@ public class Bookings extends AppCompatActivity implements NavigationView.OnNavi
             return true;
         }
         else if (itemId == R.id.side_progReports) {
-            startActivity(new Intent(getApplicationContext(), ViewProgressReportsLearner.class));
+            startActivity(new Intent(getApplicationContext(), ViewProgressReports.class));
             return true;
         }
         else if (itemId == R.id.side_yourPostings) {

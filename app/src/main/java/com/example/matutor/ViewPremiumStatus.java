@@ -12,21 +12,20 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.matutor.databinding.ActivityViewPremiumStatusBinding;
+
 public class ViewPremiumStatus extends AppCompatActivity {
 
-    Button close, renew, cancel;
+    ActivityViewPremiumStatusBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        setContentView(R.layout.activity_view_premium_status);
+        binding = ActivityViewPremiumStatusBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        close = findViewById(R.id.closeButton);
-        renew = findViewById(R.id.renewSubButton);
-        cancel = findViewById(R.id.cancelSubButton);
-
-        renew.setOnClickListener(new View.OnClickListener() {
+        binding.renewSubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Pog! You renewed your subscription!", Toast.LENGTH_SHORT).show();
@@ -37,14 +36,14 @@ public class ViewPremiumStatus extends AppCompatActivity {
             }
         });
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+        binding.cancelSubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cancelConfirmation();
             }
         });
 
-        close.setOnClickListener(new View.OnClickListener() {
+        binding.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Dashboard.class);
@@ -82,7 +81,7 @@ public class ViewPremiumStatus extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), ProfileTutor.class);
+        Intent intent = new Intent(getApplicationContext(), Profile.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
         finish();
