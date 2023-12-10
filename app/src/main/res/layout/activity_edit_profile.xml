@@ -65,7 +65,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editFirstnameInput"
                         android:layout_width="300dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:textSize="12sp"
@@ -85,7 +85,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editLastnameInput"
                         android:layout_width="300dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:textSize="12sp"
@@ -105,7 +105,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editAboutMeInput"
                         android:layout_width="300dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:textSize="12sp"
@@ -143,11 +143,13 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editEmailInput"
                         android:layout_width="300dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:textSize="12sp"
-                        android:drawablePadding="8dp"/>
+                        android:drawablePadding="8dp"
+                        android:singleLine="true"
+                        android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -190,7 +192,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editAddressInput"
                         android:layout_width="300dp"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:drawablePadding="8dp"
@@ -209,11 +211,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editContactInput"
                         android:layout_width="300dp"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:drawablePadding="8dp"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -228,11 +231,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editGuardianNameInput"
                         android:layout_width="300dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:textSize="12sp"
-                        android:drawablePadding="8dp"/>
+                        android:drawablePadding="8dp"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -247,11 +251,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editGuardianEmailInput"
                         android:layout_width="300dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="#FFFF"
                         android:textSize="12sp"
-                        android:drawablePadding="8dp"/>
+                        android:drawablePadding="8dp"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -281,12 +286,13 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editPasswordInput"
                             android:layout_width="300dp"
-                            android:layout_height="40dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="#FFFF"
                             android:textSize="12sp"
                             android:inputType="textPassword"
-                            android:drawablePadding="8dp"/>
+                            android:drawablePadding="8dp"
+                            android:singleLine="true"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -301,12 +307,13 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editConfirmPasswordInput"
                             android:layout_width="300dp"
-                            android:layout_height="40dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="#FFFF"
                             android:textSize="12sp"
                             android:inputType="textPassword"
-                            android:drawablePadding="8dp"/>
+                            android:drawablePadding="8dp"
+                            android:singleLine="true"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -337,123 +344,126 @@
                             android:textColor="@color/blue"/>
                     </LinearLayout>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="center_horizontal">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal">
-
-                            <Button
-                                android:id="@+id/tagButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:text="TOPIC 1"
-                                android:textColor="@android:color/darker_gray"
-                                android:textSize="10sp"
-                                android:backgroundTint="@color/white"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="45dp"
-                            android:layout_gravity="center_horizontal">
-
-                            <EditText
-                                android:id="@+id/editTagText"
-                                android:layout_width="220dp"
-                                android:layout_height="wrap_content"
-                                android:hint="enter tag"
-                                android:textColor="@color/text_grey"
-                                android:textColorHint="@android:color/darker_gray"
-                                android:inputType="text"/>
-
-                            <Button
-                                android:id="@+id/addTagButton"
-                                android:layout_width="65dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:backgroundTint="@android:color/darker_gray"
-                                android:text="+" />
-                        </LinearLayout>
-
-                    </FrameLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:orientation="vertical">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <EditText
+                            android:id="@+id/editTagText"
+                            android:layout_width="220dp"
+                            android:layout_height="wrap_content"
+                            android:hint="enter tag"
+                            android:inputType="text"
+                            android:textColor="@color/text_grey"
+                            android:textColorHint="@android:color/darker_gray" />
+
+                        <Button
+                            android:id="@+id/addTagButton"
+                            android:layout_width="65dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="5dp"
+                            android:backgroundTint="@android:color/darker_gray"
+                            android:text="+" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tagButtonsFrame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal">
+
+                        <Button
+                            android:id="@+id/newTagButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@color/white"
+                            android:text="ADD TAG"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tagButtonsFrame2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_horizontal"
-                        android:text="upload profile picture"
-                        android:textSize="16sp"
-                        android:textStyle="italic"
-                        android:textColor="@color/text_grey" />
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="upload profile picture"
+                            android:textSize="16sp"
+                            android:textStyle="italic"
+                            android:textColor="@color/text_grey" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center_horizontal">
+
+                            <Button
+                                android:id="@+id/editProfileImgButton"
+                                android:layout_width="65dp"
+                                android:layout_height="40dp"
+                                android:backgroundTint="@android:color/darker_gray"
+                                android:text="+"/>
+
+                            <EditText
+                                android:id="@+id/profilePathTextView"
+                                android:layout_width="220dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="choose file..."
+                                android:textColor="@color/text_grey"
+                                android:editable="false"/>
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="center_horizontal">
+                        android:layout_marginTop="25dp"
+                        android:layout_gravity="center">
 
                         <Button
-                            android:id="@+id/editProfileImgButton"
-                            android:layout_width="65dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@android:color/darker_gray"
-                            android:text="+"/>
-
-                        <EditText
-                            android:id="@+id/idPathTextView"
-                            android:layout_width="220dp"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/editSaveChangesButton"
+                            android:layout_width="145dp"
+                            android:layout_height="45dp"
                             android:layout_marginLeft="5dp"
-                            android:text="choose file..."
-                            android:textColor="@color/text_grey"
-                            android:editable="false"/>
+                            android:backgroundTint="@color/blue"
+                            android:text="save changes"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/yellow"/>
+
+                        <Button
+                            android:id="@+id/editDeleteAccountButton"
+                            android:layout_width="145dp"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="5dp"
+                            android:backgroundTint="@color/red"
+                            android:text="delete account"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:layout_centerHorizontal="true">
-
-                    <Button
-                        android:id="@+id/editSaveChangesButton"
-                        android:layout_width="145dp"
-                        android:layout_height="45dp"
-                        android:layout_marginLeft="5dp"
-                        android:backgroundTint="@color/blue"
-                        android:text="save changes"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/yellow"/>
-
-                    <Button
-                        android:id="@+id/editDeleteAccountButton"
-                        android:layout_width="145dp"
-                        android:layout_height="45dp"
-                        android:layout_marginLeft="5dp"
-                        android:backgroundTint="@color/red"
-                        android:text="delete account"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
             </LinearLayout>
+
         </ScrollView>
     </RelativeLayout>
 

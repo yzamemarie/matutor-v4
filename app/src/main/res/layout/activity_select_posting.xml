@@ -1,175 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.AppCompat.Dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectPostingTutor"
-    android:background="@color/grey">
+    android:gravity="center"
+    android:background="@color/grey"
+    tools:context=".SelectPosting">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        app:strokeColor="@color/grey"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardCornerRadius="5dp">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_marginTop="10dp"
+                android:gravity="center">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="350dp"
+                <TextView
+                    android:id="@+id/userFullnameTextView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:strokeColor="@color/grey"
-                    app:cardBackgroundColor="#F5F5F5"
-                    app:cardCornerRadius="5dp">
+                    android:text="Fullname"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"/>
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center_horizontal">
+                <TextView
+                    android:id="@+id/interestTypeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="is interested to learn"
+                    android:textSize="18sp"
+                    android:textColor="@color/text_grey"/>
+            </LinearLayout>
 
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Junester Ursora II"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/blue"/>
+            <LinearLayout
+                android:id="@+id/tagInterestFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="128dp"
-                                android:text="is interested to learn"
-                                android:textSize="14sp"
-                                android:textColor="@color/text_grey"/>
+                <Button
+                    android:id="@+id/userInterestTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/grey"
+                    android:text="INTEREST"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"
+                    android:textSize="10sp" />
+            </LinearLayout>
 
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="25dp"
-                                android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-                                <Button
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="40dp"
-                                    android:backgroundTint="@color/grey"
-                                    android:text="Aquaponics"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/blue"
-                                    android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/postingTitleTextView"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="POSTING TITLE"
+                    android:textSize="22sp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_grey"
+                    android:justificationMode="inter_word"/>
 
-                            </FrameLayout>
-                        </FrameLayout>
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Posting description here"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_grey"
+                    android:justificationMode="inter_word"/>
+            </LinearLayout>
 
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="68dp"
-                            android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="HOW TO BUILD SENSOR IOT"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/text_grey"/>
+                <Button
+                    android:id="@+id/interestedButton"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:backgroundTint="@color/blue"
+                    android:text="I'M INTERESTED"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="30dp"
-                                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/cancelButton"
+                    android:layout_width="170dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:backgroundTint="@color/red"
+                    android:text="CANCEL"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal">
-                                    <ImageView
-                                        android:layout_width="15dp"
-                                        android:layout_height="15dp"
-                                        android:src="@drawable/map_pin"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="18dp"
-                                        android:text="Talamban, Cebu City"
-                                        android:textSize="10sp"
-                                        android:textColor="@color/text_grey"/>
-                                </FrameLayout>
+        </LinearLayout>
 
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="20dp">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Posting description here"
-                                        android:textSize="14sp"
-                                        android:textColor="@color/text_grey"/>
-                                </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_marginTop="100dp">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Rate P100/hr"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/blue"/>
-                                </FrameLayout>
-                            </FrameLayout>
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="225dp"
-                            android:layout_marginBottom="10dp">
-
-                            <Button
-                                android:id="@+id/interestedButton"
-                                android:layout_width="170dp"
-                                android:layout_height="38dp"
-                                android:backgroundTint="@color/blue"
-                                android:text="i'm interested"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:textSize="12sp" />
-
-                            <Button
-                                android:id="@+id/cancelButton"
-                                android:layout_width="170dp"
-                                android:layout_height="38dp"
-                                android:layout_marginTop="35dp"
-                                android:backgroundTint="@color/red"
-                                android:text="cancel"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:textSize="12sp" />
-                        </FrameLayout>
-                    </FrameLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </FrameLayout>
-        </FrameLayout>
-    </RelativeLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

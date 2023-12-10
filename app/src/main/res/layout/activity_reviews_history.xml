@@ -33,7 +33,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="100dp"
             android:background="@drawable/toolbar_gradient_bg"
             android:elevation="4dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -42,344 +42,38 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="18dp">
-
-                <Button
-                    android:id="@+id/switchButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="110dp"
-                    android:backgroundTint="@color/white"
-                    android:text="SWITCH"
-                    android:textStyle="bold"
-                    android:textColor="@color/blue"
-                    android:textSize="8sp" />
-
-                <ImageView
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/user_pp"/>
-
-                <TextView
-                    android:id="@+id/nameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="115dp"
-                    android:gravity="center"
-                    android:text="Kyle Keiran Amadio"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                android:layout_marginRight="20dp">
 
                 <TextView
                     android:id="@+id/typeTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="138dp"
-                    android:gravity="center"
-                    android:text="LEARNER"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"/>
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Reviews History"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/yellow"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="12dp"
+                    android:text="your"
+                    android:textSize="20dp"
+                    android:textColor="@color/yellow"/>
+
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
+            android:id="@+id/reviewsHistoryScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/bottom_navigator">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="180dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:layout_gravity="center_horizontal">
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="380dp"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="5dp"
-                            app:strokeColor="@color/grey">
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="YESTERDAY"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="25dp">
-
-                                    <ImageView
-                                        android:layout_width="70dp"
-                                        android:layout_height="70dp"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:background="@drawable/profile_border"
-                                        android:src="@drawable/user_pp"/>
-
-                                    <FrameLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="90dp">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Yumi Therese Cruz"
-                                            android:textSize="16dp"
-                                            android:textStyle="bold"/>
-
-                                        <FrameLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="25dp">
-
-                                            <RatingBar
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:isIndicator="true"
-                                                android:numStars="3"
-                                                android:scaleY=".8"
-                                                android:scaleX=".8"
-                                                android:stepSize="0.1" />
-                                        </FrameLayout>
-                                    </FrameLayout>
-
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="115dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Smart"
-                                        android:textSize="20dp"
-                                        android:textStyle="bold"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="30dp"
-                                        android:text="Learner was very willing to learn."
-                                        android:textSize="16dp"/>
-                                </FrameLayout>
-                            </FrameLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="380dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="195dp"
-                            app:strokeColor="@color/grey"
-                            app:cardCornerRadius="5dp">
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="4 DAYS AGO"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"/>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="25dp">
-
-                                    <ImageView
-                                        android:layout_width="70dp"
-                                        android:layout_height="70dp"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:background="@drawable/profile_border"
-                                        android:src="@drawable/user_pp"/>
-
-                                    <FrameLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="90dp">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Rosely Cordova"
-                                            android:textSize="16dp"
-                                            android:textStyle="bold"/>
-
-                                        <FrameLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="25dp">
-
-                                            <RatingBar
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:isIndicator="true"
-                                                android:numStars="3"
-                                                android:scaleY=".8"
-                                                android:scaleX=".8"
-                                                android:stepSize="0.1" />
-                                        </FrameLayout>
-                                    </FrameLayout>
-
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="115dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Good student"
-                                        android:textSize="20dp"
-                                        android:textStyle="bold"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="30dp"
-                                        android:text="Listens well but is too dependent on ChatGPT."
-                                        android:textSize="16dp"/>
-                                </FrameLayout>
-                            </FrameLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="380dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="390dp"
-                            app:strokeColor="@color/grey"
-                            app:cardCornerRadius="5dp">
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="ONE WEEK AGO"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"/>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="25dp">
-
-                                    <ImageView
-                                        android:layout_width="70dp"
-                                        android:layout_height="70dp"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:background="@drawable/profile_border"
-                                        android:src="@drawable/user_pp"/>
-
-                                    <FrameLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="90dp">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="John Denzel Arañas"
-                                            android:textSize="16dp"
-                                            android:textStyle="bold"/>
-
-                                        <FrameLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="25dp">
-
-                                            <RatingBar
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:isIndicator="true"
-                                                android:numStars="3"
-                                                android:scaleY=".8"
-                                                android:scaleX=".8"
-                                                android:stepSize="0.1" />
-                                        </FrameLayout>
-                                    </FrameLayout>
-
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="115dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Cancelled session"
-                                        android:textSize="20dp"
-                                        android:textStyle="bold"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="30dp"
-                                        android:text="Cancelled session at the last minute."
-                                        android:textSize="16dp"/>
-                                </FrameLayout>
-                            </FrameLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="380dp"
-                            android:layout_height="190dp"
-                            android:layout_marginTop="650dp"
-                            app:strokeColor="@color/grey"
-                            android:backgroundTint="@color/grey">
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                    </FrameLayout>
-
-                </FrameLayout>
-
-
-            </RelativeLayout>
         </ScrollView>
     </RelativeLayout>
 

@@ -33,7 +33,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="100dp"
             android:background="@drawable/toolbar_gradient_bg"
             android:elevation="4dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -42,272 +42,38 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="18dp">
-
-                <Button
-                    android:id="@+id/switchButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="110dp"
-                    android:backgroundTint="@color/white"
-                    android:text="SWITCH"
-                    android:textStyle="bold"
-                    android:textColor="@color/blue"
-                    android:textSize="8sp" />
-
-                <ImageView
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/user_pp"/>
-
-                <TextView
-                    android:id="@+id/nameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="115dp"
-                    android:gravity="center"
-                    android:text="Kyle Keiran Amadio"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                android:layout_marginRight="20dp">
 
                 <TextView
                     android:id="@+id/typeTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="138dp"
-                    android:gravity="center"
-                    android:text="LEARNER"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"/>
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Bookings"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/yellow"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="12dp"
+                    android:text="your"
+                    android:textSize="20dp"
+                    android:textColor="@color/yellow"/>
+
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
+            android:id="@+id/bookingsScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/bottom_navigator">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="180dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:layout_gravity="center_horizontal">
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="380dp"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="5dp"
-                            app:strokeColor="@color/grey">
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Today - 3:00 PM"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="20dp"
-                                    android:text="upcoming session with tutor"
-                                    android:textColor="@android:color/darker_gray"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="160dp"
-                                    android:layout_marginTop="20dp"
-                                    android:text="Jennifer Español"
-                                    android:textColor="@color/blue"
-                                    android:textSize="12sp"
-                                    android:textStyle="italic" />
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="40dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="WORLD LITERATURE"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="65dp">
-
-                                    <ImageView
-                                        android:layout_width="15dp"
-                                        android:layout_height="15dp"
-                                        android:src="@drawable/map_pin" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="18dp"
-                                        android:text="Talamban, Cebu City"
-                                        android:textColor="@color/text_grey"
-                                        android:textSize="12sp" />
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="90dp">
-
-                                    <Button
-                                        android:id="@+id/reviewTutorButton1"
-                                        android:layout_width="145dp"
-                                        android:layout_height="45dp"
-                                        android:backgroundTint="@color/blue"
-                                        android:text="Review Tutor"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-
-                                    <Button
-                                        android:id="@+id/cancelTutorSessionButton1"
-                                        android:layout_width="145dp"
-                                        android:layout_height="45dp"
-                                        android:layout_marginLeft="150dp"
-                                        android:backgroundTint="@color/red"
-                                        android:text="Cancel Session"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-                                </FrameLayout>
-
-                            </FrameLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="380dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="165dp"
-                            app:strokeColor="@color/grey"
-                            app:cardCornerRadius="5dp">
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Sept. 12, 2023 (Tuesday) - 10:30 AM"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="20dp"
-                                    android:text="upcoming session with tutor"
-                                    android:textSize="12sp"
-                                    android:textColor="@android:color/darker_gray"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="160dp"
-                                    android:layout_marginTop="20dp"
-                                    android:text="Russelle Dianon"
-                                    android:textSize="12sp"
-                                    android:textStyle="italic"
-                                    android:textColor="@color/blue"/>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="40dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="UI/UX DESIGN (WEB)"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"/>
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="65dp">
-
-                                    <ImageView
-                                        android:layout_width="15dp"
-                                        android:layout_height="15dp"
-                                        android:src="@drawable/map_pin"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="18dp"
-                                        android:text="Apas, Cebu City"
-                                        android:textSize="12sp"
-                                        android:textColor="@color/text_grey"/>
-                                </FrameLayout>
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="90dp">
-
-                                    <Button
-                                        android:id="@+id/reviewTutorButton2"
-                                        android:layout_width="145dp"
-                                        android:layout_height="45dp"
-                                        android:backgroundTint="@color/text_grey"
-                                        android:text="Review Tutor"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-
-                                    <Button
-                                        android:id="@+id/cancelTutorSessionButton2"
-                                        android:layout_width="145dp"
-                                        android:layout_height="45dp"
-                                        android:layout_marginLeft="150dp"
-                                        android:backgroundTint="@color/red"
-                                        android:text="Cancel Session"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-                                </FrameLayout>
-                            </FrameLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                    </FrameLayout>
-
-                </FrameLayout>
-
-
-            </RelativeLayout>
         </ScrollView>
     </RelativeLayout>
 
