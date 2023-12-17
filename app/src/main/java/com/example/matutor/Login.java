@@ -14,16 +14,20 @@ import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class Login extends AppCompatActivity {
 
+    private String userType = "learner"; //default user type
     ActivityLoginBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -46,8 +50,6 @@ public class Login extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        auth = FirebaseAuth.getInstance();
-
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,50 +58,10 @@ public class Login extends AppCompatActivity {
 
                 if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     if (!password.isEmpty()) {
-                        // Check in the "user_learner" collection
-                        firestore.collection("user_learner")
-                                .whereEqualTo("learnerEmail", email)
-                                .get()
-                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot learnerSnapshots) {
-                                        if (!learnerSnapshots.isEmpty()) {
-                                            // User found in "user_learner" collection
-                                            loginUser(email, password);
-                                        } else {
-                                            // User not found in "user_learner" collection, check in "user_tutor" collection
-                                            firestore.collection("user_tutor")
-                                                    .whereEqualTo("tutorEmail", email)
-                                                    .get()
-                                                    .addOnCompleteListener(tutorTask -> {
-                                                        if (tutorTask.isSuccessful()) {
-                                                            QuerySnapshot tutorSnapshots = tutorTask.getResult();
-
-                                                            if (tutorSnapshots != null) {
-                                                                if (!tutorSnapshots.isEmpty()) {
-                                                                    // User found in "user_tutor" collection
-                                                                    loginUser(email, password);
-                                                                } else {
-                                                                    // User not found in "user_tutor" collection
-                                                                    Toast.makeText(getApplicationContext(), "User not found in user_tutor collection", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            } else {
-                                                                // Log an error message if tutorSnapshots is null
-                                                                Toast.makeText(getApplicationContext(), "tutorSnapshots is empty", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } else {
-                                                            // Handle the failure case
-                                                            Toast.makeText(getApplicationContext(), "Error: " + tutorTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
+                        // Check user type first by default as learner
+                        checkLearnerUser(email, password);
                     } else {
-                        binding.passwordInput.setError("Please enter your password");
+                        binding.passwordInput.setError("Please enter your password.");
                     }
                 } else if (email.isEmpty()) {
                     binding.emailInput.setError("Please enter your email address.");
@@ -144,7 +106,58 @@ public class Login extends AppCompatActivity {
         builder.show();
     }
 
-    private void loginUser(String email, String password) {
+    private void checkLearnerUser(String email, String password) {
+        DocumentReference learnerRef = firestore.collection("all_users").document(userType).collection("users").document(email);
+
+        learnerRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            loginUser(email, password, "learner");
+                        } else {
+                            checkTutorUser(email, password);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Error occurred while checking user type (checkLearnerUser): " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void checkTutorUser(String email, String password) {
+        DocumentReference tutorRef = firestore.collection("all_users").document(userType).collection("users").document(email);
+
+        tutorRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Check if the document contains fields or metadata indicating a tutor user (adapt based on your data structure)
+                            if (documentSnapshot.contains("tutor") && documentSnapshot.getBoolean("tutor")) {
+                                loginUser(email, password, "tutor");
+                            } else {
+                                Toast.makeText(getApplicationContext(), "User not found or invalid user type. (documentSnapshot.contains)", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "User not found or invalid user type. (documentSnapshot.exists)", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Error occurred while checking user type (checkTutorUser): " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private void loginUser(String email, String password, String userType) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -152,17 +165,20 @@ public class Login extends AppCompatActivity {
                         if (authTask.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                            intent.putExtra("userType", userType); // Pass chosen user type to Dashboard
                             startActivity(intent);
                             finish();
                         } else {
-                            // Check if the failure is due to user not being found
-                            if (authTask.getException() != null &&
-                                    authTask.getException().getMessage() != null &&
-                                    authTask.getException().getMessage().contains("no user record corresponding")) {
-                                // Do nothing or handle as needed
+                            if (authTask.getException() != null) {
+                                if (authTask.getException().getMessage().contains("wrong-password")) {
+                                    Toast.makeText(getApplicationContext(), "Incorrect password.", Toast.LENGTH_SHORT).show();
+                                } else if (authTask.getException().getMessage().contains("no user record corresponding")) {
+                                    Toast.makeText(getApplicationContext(), "User not found.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Login failed: " + authTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                // Display the toast for other login failures
-                                Toast.makeText(getApplicationContext(), "Login Failed!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Login failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

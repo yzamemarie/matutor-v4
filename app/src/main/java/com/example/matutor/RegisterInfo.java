@@ -51,6 +51,7 @@ public class RegisterInfo extends AppCompatActivity {
     private static final int SELECT_SELFIE = 5;
     private static final int MAX_TAGS = 5; //max number of tags allowed
     private List<String> tagsList = new ArrayList<>();//string to hold tags
+    private String userType;
 
     ActivityRegisterInfoBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -132,18 +133,20 @@ public class RegisterInfo extends AppCompatActivity {
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String userType = "learner"; //only learners can register through the mobile app
+                
                 //get text from text fields
-                String learnerFirstname = binding.regFirstnameInput.getText().toString().trim();
-                String learnerLastname = binding.regLastnameInput.getText().toString().trim();
-                String learnerEmail = binding.regEmailInput.getText().toString().trim();
-                String learnerPassword = binding.regPasswordInput.getText().toString().trim();
+                String userFirstname = binding.regFirstnameInput.getText().toString().trim();
+                String userLastname = binding.regLastnameInput.getText().toString().trim();
+                String userEmail = binding.regEmailInput.getText().toString().trim();
+                String userPassword = binding.regPasswordInput.getText().toString().trim();
                 String confirmPass = binding.regConfirmPasswordInput.getText().toString().trim();
-                String learnerBdate = binding.regEditDate.getText().toString().trim();
-                String learnerAge = binding.regAgeSpinner.getSelectedItem().toString().trim();
-                String learnerAddress = binding.regAddressInput.getText().toString().trim();
-                String learnerContact = binding.regContactInput.getText().toString().trim();
-                String learnerGuardianName = binding.regGuardianNameInput.getText().toString().trim();
-                String learnerGuardianEmail = binding.regGuardianEmailInput.getText().toString().trim();
+                String userBdate = binding.regEditDate.getText().toString().trim();
+                String userAge = binding.regAgeSpinner.getSelectedItem().toString().trim();
+                String userAddress = binding.regAddressInput.getText().toString().trim();
+                String userContact = binding.regContactInput.getText().toString().trim();
+                String userGuardianName = binding.regGuardianNameInput.getText().toString().trim();
+                String userGuardianEmail = binding.regGuardianEmailInput.getText().toString().trim();
 
                 //checks if front and back ID images and selfie are selected
                 if (binding.idFrontPathTextView.getText().toString().isEmpty()) {
@@ -155,84 +158,89 @@ public class RegisterInfo extends AppCompatActivity {
                 }
 
                 //checks if text fields are empty and displays toast prompt if true
-                if (learnerFirstname.isEmpty()) {
+                if (userFirstname.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your first name.", Toast.LENGTH_SHORT).show();
-                } else if (learnerLastname.isEmpty()) {
+                } else if (userLastname.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your last name.", Toast.LENGTH_SHORT).show();
-                } else if (learnerEmail.isEmpty()) {
+                } else if (userEmail.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your email.", Toast.LENGTH_SHORT).show();
-                } else if (learnerPassword.isEmpty()) {
+                } else if (userPassword.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your password.", Toast.LENGTH_SHORT).show();
                 } else if (confirmPass.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please confirm your password.", Toast.LENGTH_SHORT).show();
-                } else if (learnerBdate.isEmpty()) {
+                } else if (userBdate.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please select your birthdate.", Toast.LENGTH_SHORT).show();
                 } else if (binding.regAgeSpinner.getSelectedItem().equals("0")) {
                     Toast.makeText(getApplicationContext(), "Please select your age.", Toast.LENGTH_SHORT).show();
-                } else if (learnerAddress.isEmpty()) {
+                } else if (userAddress.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your address.", Toast.LENGTH_SHORT).show();
-                } else if (learnerContact.isEmpty()) {
+                } else if (userContact.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your contact number.", Toast.LENGTH_SHORT).show();
-                } else if (learnerGuardianName.isEmpty()) {
+                } else if (userGuardianName.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your parent's or guardian's name.", Toast.LENGTH_SHORT).show();
-                } else if (learnerGuardianEmail.isEmpty()) {
+                } else if (userGuardianEmail.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter your parent's or guardian's email.", Toast.LENGTH_SHORT).show();
-                } else if (!confirmPass.equals(learnerPassword)) {
+                } else if (!confirmPass.equals(userPassword)) {
                     Toast.makeText(getApplicationContext(), "Passwords do not match. Please enter again.", Toast.LENGTH_SHORT).show();
                 } else {
-                    auth.createUserWithEmailAndPassword(learnerEmail, learnerPassword)
+                    auth.createUserWithEmailAndPassword(userEmail, userPassword)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     String uid = auth.getCurrentUser().getUid();
                                     if (uid != null) {
                                         //create user document for firestore
                                         Map<String, Object> learnerData = new HashMap<>();
-                                        learnerData.put("learnerUid", uid);
-                                        learnerData.put("learnerFirstname", learnerFirstname);
-                                        learnerData.put("learnerLastname", learnerLastname);
-                                        learnerData.put("learnerEmail", learnerEmail);
-                                        learnerData.put("learnerPassword", learnerPassword);
-                                        learnerData.put("learnerBdate", learnerBdate);
-                                        learnerData.put("learnerAge", learnerAge);
-                                        learnerData.put("learnerContact", learnerContact);
-                                        learnerData.put("learnerAddress", learnerAddress);
-                                        learnerData.put("learnerTag", tagsList);
-                                        learnerData.put("learnerGuardianName", learnerGuardianName);
-                                        learnerData.put("learnerGuardianEmail", learnerGuardianEmail);
+                                        learnerData.put("userUid", uid);
+                                        learnerData.put("userType", userType);
+                                        learnerData.put("userFirstname", userFirstname);
+                                        learnerData.put("userLastname", userLastname);
+                                        learnerData.put("userEmail", userEmail);
+                                        learnerData.put("userPassword", userPassword);
+                                        learnerData.put("userBdate", userBdate);
+                                        learnerData.put("userAge", userAge);
+                                        learnerData.put("userContact", userContact);
+                                        learnerData.put("userAddress", userAddress);
+                                        learnerData.put("userTag", tagsList);
+                                        learnerData.put("userGuardianName", userGuardianName);
+                                        learnerData.put("userGuardianEmail", userGuardianEmail);
 
-                                        firestore.collection("user_learner")
-                                                .document(learnerEmail)  // Use learnerEmail as the document ID
-                                                .set(learnerData)
-                                                .addOnSuccessListener(aVoid -> {
-                                                    binding.regFirstnameInput.getText().clear();
-                                                    binding.regLastnameInput.getText().clear();
-                                                    binding.regEmailInput.getText().clear();
-                                                    binding.regPasswordInput.getText().clear();
-                                                    binding.regEditDate.getText().clear();
-                                                    binding.regAgeSpinner.setSelection(0);
-                                                    binding.regAddressInput.getText().clear();
-                                                    binding.regContactInput.getText().clear();
-                                                    binding.regGuardianNameInput.getText().clear();
-                                                    binding.regGuardianEmailInput.getText().clear();
+                                        if (userType.equals("learner")) {
+                                            firestore.collection("all_users")
+                                                    .document(userType)
+                                                    .collection("users")
+                                                    .document(userEmail)
+                                                    .set(learnerData)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        binding.regFirstnameInput.getText().clear();
+                                                        binding.regLastnameInput.getText().clear();
+                                                        binding.regEmailInput.getText().clear();
+                                                        binding.regPasswordInput.getText().clear();
+                                                        binding.regEditDate.getText().clear();
+                                                        binding.regAgeSpinner.setSelection(0);
+                                                        binding.regAddressInput.getText().clear();
+                                                        binding.regContactInput.getText().clear();
+                                                        binding.regGuardianNameInput.getText().clear();
+                                                        binding.regGuardianEmailInput.getText().clear();
 
-                                                    // Upload images to Firestore Storage
-                                                    uploadDefaultProfile(learnerEmail, firestore);
-                                                    uploadImageToFirestore(learnerEmail, SELECT_ID_FRONT, imageData, idFrontFileName);
-                                                    uploadImageToFirestore(learnerEmail, SELECT_ID_BACK, imageData, idBackFileName);
-                                                    uploadImageToFirestore(learnerEmail, SELECT_SELFIE, imageData, selfieFileName);
+                                                        // Upload images to Firestore Storage
+                                                        uploadDefaultProfile(userEmail, firestore);
+                                                        uploadImageToFirestore(userEmail, SELECT_ID_FRONT, imageData, idFrontFileName);
+                                                        uploadImageToFirestore(userEmail, SELECT_ID_BACK, imageData, idBackFileName);
+                                                        uploadImageToFirestore(userEmail, SELECT_SELFIE, imageData, selfieFileName);
 
-                                                    Toast.makeText(getApplicationContext(), "Learner has successfully registered!", Toast.LENGTH_SHORT).show();
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                });
+                                                        Toast.makeText(getApplicationContext(), "Learner has successfully registered!", Toast.LENGTH_SHORT).show();
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        Toast.makeText(getApplicationContext(), "Error: (all_user)" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                        }
 
                                     }
                                     startActivity(new Intent(getApplicationContext(), Login.class));
                                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                     finish();
 
-                                }  else {
+                                } else {
                                     Toast.makeText(getApplicationContext(), "Registration failed!", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -332,29 +340,32 @@ public class RegisterInfo extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void uploadDefaultProfile(String learnerEmail, FirebaseFirestore firestore) {
+    private void uploadDefaultProfile(String userEmail, FirebaseFirestore firestore) {
         int defaultProfilePictureResourceId = R.drawable.user_pp;
         Uri defaultProfilePictureUri = Uri.parse("android.resource://" + getPackageName() + "/" + defaultProfilePictureResourceId);
-        StorageReference storageRef = storage.getReference().child("profile_pictures/" + learnerEmail + "/user_pp.png");
+        StorageReference storageRef = storage.getReference().child("profile_pictures/" + userEmail + "/user_pp.png");
         UploadTask uploadTask = storageRef.putFile(defaultProfilePictureUri);
 
-        uploadTask.addOnSuccessListener(taskSnapshot -> updateProfilePictureInFirestore(learnerEmail, firestore))
+        uploadTask.addOnSuccessListener(taskSnapshot -> updateProfilePictureInFirestore(userEmail, firestore))
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error: (uploadDefaultProfile)" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private void updateProfilePictureInFirestore(String learnerEmail, FirebaseFirestore firestore) {
-        StorageReference storageRef = storage.getReference().child("profile_pictures/" + learnerEmail + "/user_pp.png");
+    private void updateProfilePictureInFirestore(String userEmail, FirebaseFirestore firestore) {
+        StorageReference storageRef = storage.getReference().child("profile_pictures/" + userEmail + "/user_pp.png");
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             String downloadUrl = uri.toString();
-            DocumentReference userRef = firestore.collection("learner").document(learnerEmail);
-            userRef.update("learnerProfilePicture", downloadUrl)
+            DocumentReference userRef = firestore.collection("all_users")
+                    .document(userType) // Use userType variable here
+                    .collection("users") // Add "users" subcollection
+                    .document(userEmail); // Use userEmail variable here
+            userRef.update("userProfilePicture", downloadUrl)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getApplicationContext(), "Successfully updated to Firestore ", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error: (updateProfilePictureInFirestore)" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
     }
@@ -460,8 +471,8 @@ public class RegisterInfo extends AppCompatActivity {
         }
     }
 
-    private void uploadImageToFirestore(String learnerEmail, int perm, Intent data, String fileName) {
-        StorageReference storageRef = storage.getReference().child(learnerEmail);
+    private void uploadImageToFirestore(String userEmail, int perm, Intent data, String fileName) {
+        StorageReference storageRef = storage.getReference().child(userEmail);
         UploadTask uploadTask = storageRef.putFile(getImageUri(perm, data, fileName));
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
@@ -471,20 +482,23 @@ public class RegisterInfo extends AppCompatActivity {
                 String updateFieldImageUri;
                 switch (perm) {
                     case SELECT_ID_FRONT:
-                        updateFieldImageUri = "learnerIdFrontImage";
+                        updateFieldImageUri = "userIdFrontImage";
                         break;
                     case SELECT_ID_BACK:
-                        updateFieldImageUri = "learnerIdBackImage";
+                        updateFieldImageUri = "userIdBackImage";
                         break;
                     case SELECT_SELFIE:
-                        updateFieldImageUri = "learnerSelfieImage";
+                        updateFieldImageUri = "userSelfieImage";
                         break;
                     default:
                         updateFieldImageUri = "";
                 }
 
                 if (!updateFieldImageUri.isEmpty()) {
-                    DocumentReference userRef = firestore.collection("user_learner").document(learnerEmail);
+                    DocumentReference userRef = firestore.collection("all_users")
+                            .document(userType) // Use userType variable instead of "user_learner"
+                            .collection("users") // Add "users" subcollection
+                            .document(userEmail); // Use learnerEmail variable
                     userRef.update(updateFieldImageUri, imageUri)
                             .addOnSuccessListener(aVoid -> {
                                 // Image URL updated successfully in Firestore
