@@ -25,9 +25,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
 public class Login extends AppCompatActivity {
 
-    private String userType = "learner"; //default user type
+    private String userType;
     ActivityLoginBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -107,7 +109,12 @@ public class Login extends AppCompatActivity {
     }
 
     private void checkLearnerUser(String email, String password) {
-        DocumentReference learnerRef = firestore.collection("all_users").document(userType).collection("users").document(email);
+        userType = "learner";
+
+        DocumentReference learnerRef = firestore.collection("all_users")
+                .document(userType)
+                .collection("users").
+                document(email);
 
         learnerRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -129,22 +136,26 @@ public class Login extends AppCompatActivity {
     }
 
     private void checkTutorUser(String email, String password) {
-        DocumentReference tutorRef = firestore.collection("all_users").document(userType).collection("users").document(email);
+        userType = "tutor";
+
+        DocumentReference tutorRef = firestore.collection("all_users")
+                        .document(userType)
+                        .collection("users")
+                        .document(email);
 
         tutorRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            // Check if the document contains fields or metadata indicating a tutor user (adapt based on your data structure)
-                            if (documentSnapshot.contains("tutor") && documentSnapshot.getBoolean("tutor")) {
+                            if (userType != null && userType.equals("tutor")) {
                                 loginUser(email, password, "tutor");
-                            } else {
-                                Toast.makeText(getApplicationContext(), "User not found or invalid user type. (documentSnapshot.contains)", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getApplicationContext(), "User not found or invalid user type. (documentSnapshot.contains tutor)", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {
-                            Toast.makeText(getApplicationContext(), "User not found or invalid user type. (documentSnapshot.exists)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "User not found or invalid user type. (documentSnapshot.exists tutor)", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
