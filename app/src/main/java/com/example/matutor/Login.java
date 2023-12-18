@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -174,9 +175,14 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> authTask) {
                         if (authTask.isSuccessful()) {
+                            // Save user type to shared preferences
+                            SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putString("user_type", userType);
+                            editor.apply();
+
                             Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-                            intent.putExtra("userType", userType); // Pass chosen user type to Dashboard
                             startActivity(intent);
                             finish();
                         } else {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.media.MediaTimestamp;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import java.util.Map;
 public class CreatePosting extends AppCompatActivity {
     private List<String> tagsList = new ArrayList<>();//string to hold tags
     private static final int MAX_TAGS = 5;
+    private String userType;
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     FirebaseAuth auth = FirebaseAuth.getInstance();
     ActivityCreatePostingBinding binding;
 
@@ -45,6 +48,13 @@ public class CreatePosting extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
         binding = ActivityCreatePostingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
+        userType = pref.getString("user_type", "");
+
+        // Fetch the user's document to determine userType
+        fetchUserDocument();
 
         binding.addTagButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,66 +85,92 @@ public class CreatePosting extends AppCompatActivity {
                 // Fetching the learner's email from the authenticated user
                 FirebaseUser currentUser = auth.getCurrentUser();
                 if (currentUser != null) {
-                    String learnerEmail = currentUser.getEmail();
+                    String userEmail = currentUser.getEmail();
 
-                    if (!TextUtils.isEmpty(learnerEmail)) {
-                        // Creating a reference to the learner's document in "user_learner" collection
-                        DocumentReference learnerDocument = FirebaseFirestore.getInstance()
-                                .collection("user_learner")
-                                .document(learnerEmail);
+                    if (!TextUtils.isEmpty(userEmail)) {
+                        DocumentReference userRef = firestore.collection("all_users")
+                                .document(userType)
+                                .collection("users")
+                                .document(userEmail);
 
                         // Fetching learner's data from the document snapshot
-                        learnerDocument.get().addOnSuccessListener(documentSnapshot -> {
+                        userRef.get().addOnSuccessListener(documentSnapshot -> {
                             if (documentSnapshot.exists()) {
-                                // Extracting learner's data
-                                String learnerUid = documentSnapshot.getString("learnerUid");
-                                String learnerFirstname = documentSnapshot.getString("learnerFirstname");
-                                String learnerLastname = documentSnapshot.getString("learnerLastname");
+                                // Extract the user type from the document
+                                String userType = documentSnapshot.getString("userType");
 
-                                // Creating a reference to the learner's collection in "createdPost_learner"
-                                CollectionReference createdPostCollection = FirebaseFirestore.getInstance()
-                                        .collection("createdPost_learner")
-                                        .document(learnerEmail)
-                                        .collection("created_posts");
+                                // If user type is empty, default to "learners"
+                                if (TextUtils.isEmpty(userType)) {
+                                    userType = "learner";
+                                }
 
-                                // Getting post details from UI input fields
-                                String postTitle = binding.postTitleInput.getText().toString();
-                                String postDescription = binding.postDescInput.getText().toString();
-                                String postId = createdPostCollection.document().getId();
+                                // Fetching learner's data from the document snapshot
+                                String finalUserType = userType;
+                                firestore.collection("all_users")
+                                        .document(userType)
+                                        .collection("users")
+                                        .document(userEmail)
+                                        .get()
+                                        .addOnSuccessListener(userSnapshot -> {
+                                            if (userSnapshot.exists()) {
+                                                // Extracting learner's data
+                                                String userUid = documentSnapshot.getString("userUid");
+                                                String userFirstname = documentSnapshot.getString("userFirstname");
+                                                String userLastname = documentSnapshot.getString("userLastname");
 
-                                // Creating a map to store post data
-                                Map<String, Object> createdPostData = new HashMap<>();
-                                createdPostData.put("postId", postId);
-                                createdPostData.put("postTitle", postTitle);
-                                createdPostData.put("postDescription", postDescription);
-                                createdPostData.put("postTags", tagsList);
-                                createdPostData.put("learnerUid", learnerUid);
-                                createdPostData.put("learnerFirstname", learnerFirstname);
-                                createdPostData.put("learnerLastname", learnerLastname);
-                                createdPostData.put("learnerEmail", learnerEmail);
+                                                // Creating a reference to the learner's collection in "createdPosts"
+                                                CollectionReference createdPostCollection = FirebaseFirestore.getInstance()
+                                                        .collection("createdPosts")
+                                                        .document("createdPost_" + finalUserType)
+                                                        .collection(userEmail);
 
-                                // Adding the post to the learner's "created_posts" collection with auto-generated ID
-                                createdPostCollection.add(createdPostData)
-                                        .addOnCompleteListener(postTask -> {
-                                            if (postTask.isSuccessful()) {
-                                                // Post creation successful
-                                                Toast.makeText(getApplicationContext(), "Post created!", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(getApplicationContext(), ViewCreatedPosts.class);
-                                                startActivity(intent);
-                                                overridePendingTransition( R.anim.slide_out_left, R.anim.slide_in_right);
-                                                finish();
+                                                // Getting post details from UI input fields
+                                                String postTitle = binding.postTitleInput.getText().toString();
+                                                String postDescription = binding.postDescInput.getText().toString();
+                                                String postId = userEmail; //user's email as the document id
+
+                                                // Creating a map to store post data
+                                                Map<String, Object> createdPostData = new HashMap<>();
+                                                createdPostData.put("postId", postId);
+                                                createdPostData.put("postTitle", postTitle);
+                                                createdPostData.put("postDescription", postDescription);
+                                                createdPostData.put("postTags", tagsList);
+                                                createdPostData.put("userUid", userUid);
+                                                createdPostData.put("userFirstname", userFirstname);
+                                                createdPostData.put("userLastname", userLastname);
+                                                createdPostData.put("userEmail", userEmail);
+
+                                                // Adding the post to the learner's "created_posts" collection with auto-generated ID
+                                                createdPostCollection.add(createdPostData)
+                                                        .addOnCompleteListener(postTask -> {
+                                                            if (postTask.isSuccessful()) {
+                                                                // Post creation successful
+                                                                Toast.makeText(getApplicationContext(), "Post created!", Toast.LENGTH_SHORT).show();
+                                                                Intent intent = new Intent(getApplicationContext(), ViewCreatedPosts.class);
+                                                                startActivity(intent);
+                                                                overridePendingTransition( R.anim.slide_out_left, R.anim.slide_in_right);
+                                                                finish();
+                                                            } else {
+                                                                // Post creation failed
+                                                                Toast.makeText(getApplicationContext(), "Post creation failed!", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
                                             } else {
-                                                // Post creation failed
-                                                Toast.makeText(getApplicationContext(), "Post creation failed!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "Document does not exist for userEmail (userSnapshot): " + userEmail, Toast.LENGTH_SHORT).show();
                                             }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Error fetching user's data
+                                            Toast.makeText(getApplicationContext(), "Error fetching user's data (userSnapshot): " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         });
+
                             } else {
                                 // Document does not exist for learnerEmail in "user_learner"
-                                Toast.makeText(getApplicationContext(), "Document does not exist for learnerEmail: " + learnerEmail, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Document does not exist for userEmail (documentSnapshot): " + userEmail, Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(e -> {
                             // Error fetching learner's data
-                            Toast.makeText(getApplicationContext(), "Error fetching learner's data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Error fetching learner's data (userDocument): " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
                     } else {
                         // Handling case where learner email is empty
@@ -147,6 +183,57 @@ public class CreatePosting extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void fetchUserDocument() {
+        // Fetching the learner's email from the authenticated user
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userEmail = currentUser.getEmail();
+
+            if (!TextUtils.isEmpty(userEmail)) {
+
+                if (!TextUtils.isEmpty(userType)) {
+                    // Creating a reference to the user's document in "app_users"
+                    DocumentReference userRef = FirebaseFirestore.getInstance()
+                            .collection("all_users")
+                            .document(userType)
+                            .collection("users")
+                            .document(userEmail);
+
+                    // Fetching learner's data from the document snapshot
+                    userRef.get().addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            // Extracting userType from the document data
+                            userType = documentSnapshot.getString("userType");
+
+                            // If userType is null or empty, set default as learner
+                            if (TextUtils.isEmpty(userType)) {
+                                userType = "learner";
+                            }
+                        } else {
+                            // Document does not exist for userEmail in "app_users"
+                            Toast.makeText(getApplicationContext(), "Document does not exist for userEmail (fetchUserDocument documentSnapshot): " + userEmail, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(e -> {
+                        // Error fetching user's data
+                        Toast.makeText(getApplicationContext(), "Error fetching user's data (fetchUserDocument userDocument): " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Unable to retrieve user type from SharedPreferences.", Toast.LENGTH_SHORT).show();
+
+                }
+
+            } else {
+                // Handling case where userEmail is empty
+                Toast.makeText(getApplicationContext(), "User email is empty", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            // Handling case where user is not authenticated
+            Toast.makeText(getApplicationContext(), "User not authenticated", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateTagButtons() {
