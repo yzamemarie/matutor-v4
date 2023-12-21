@@ -1,166 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.AppCompat.Dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectPostingTutor"
-    android:background="@color/grey">
+    android:gravity="center"
+    android:background="@color/grey"
+    tools:context=".CreateProgressReport">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="#F5F5F5"
+        app:strokeColor="@color/grey">
 
-        <FrameLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="38dp"
+            android:background="@color/white"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/white">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="20dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="350dp"
+                <Button
+                    android:id="@+id/closeButton"
+                    android:layout_width="58dp"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="5dp"
-                    app:cardBackgroundColor="#F5F5F5"
-                    app:strokeColor="@color/grey">
+                    android:backgroundTint="@color/white"
+                    android:text="X"
+                    android:textColor="@color/text_grey"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="PROGRESS REPORT"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="progress report on"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/learnerFullnameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text= "Learner's Fullname"
+                    android:textColor="@color/text_grey"
+                    android:textSize="24sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="progress report created by"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tutorFullnameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text= "Tutor's Fullname"
+                    android:textColor="@color/text_grey"
+                    android:textSize="24sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="report content"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/postDescInput"
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center"
                         android:background="@color/white"
-                        android:elevation="4dp"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                        app:titleTextColor="@color/white">
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </FrameLayout>
+            </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:layout_marginRight="20dp">
+            <Button
+                android:id="@+id/sendReportButton"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/blue"
+                android:text="send report"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                            <Button
-                                android:id="@+id/closeButton"
-                                android:layout_width="58dp"
-                                android:layout_height="wrap_content"
-                                android:backgroundTint="@color/white"
-                                android:text="X"
-                                android:textColor="@color/text_grey"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+        </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="40dp"
-                                android:text="PROGRESS REPORT"
-                                android:textColor="@color/blue"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-                    </androidx.appcompat.widget.Toolbar>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="45dp">
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="5dp">
-
-                            <FrameLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="progress report on"
-                                    android:textColor="@color/text_grey"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_marginTop="26dp">
-
-                                    <TextView
-                                        android:id="@+id/userFullnameTextView"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="User's Fullname"
-                                        android:textColor="@color/text_grey"
-                                        android:textSize="24sp"
-                                        android:textStyle="italic" />
-                                </FrameLayout>
-
-                            </FrameLayout>
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="70dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="report content"
-                                    android:textColor="@color/text_grey"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <FrameLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_marginTop="26dp">
-
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/postDescInput"
-                                        android:layout_width="300dp"
-                                        android:layout_height="300dp"
-                                        android:layout_gravity="center"
-                                        android:background="@color/white"
-                                        android:textColor="@color/white"
-                                        android:textSize="14sp" />
-                                </FrameLayout>
-                            </FrameLayout>
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="410dp">
-                                <Button
-                                    android:id="@+id/sendReportButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="50dp"
-                                    android:backgroundTint="@color/blue"
-                                    android:text="send report"
-                                    android:textColor="@color/white"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-                            </FrameLayout>
-
-                        </FrameLayout>
-
-                    </RelativeLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </FrameLayout>
-        </FrameLayout>
-    </RelativeLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

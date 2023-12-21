@@ -15,7 +15,7 @@
         android:layout_width="330dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/activity_sidebar"
+        app:headerLayout="@layout/sidebar"
         app:menu="@menu/sidemenu"/>
 
     <RelativeLayout

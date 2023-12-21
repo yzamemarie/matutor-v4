@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/headerFramePosting"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/userFirstnamePosting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="First name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/blue"/>
+
+            <TextView
+                android:id="@+id/userLastnamePosting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Last name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/blue"/>
+
+            <TextView
+                android:id="@+id/findTypePosting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="is looking for a tutor"
+                android:textSize="14sp"
+                android:textColor="@color/text_grey"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tagFramePosting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/headerFramePosting">
+
+            <Button
+                android:id="@+id/tagPosting"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/grey"
+                android:text="Topic 1"
+                android:textStyle="bold"
+                android:textColor="@color/blue"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/detailsFramePosting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tagFramePosting"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titlePosting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POST TITLE"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/descPosting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Posting description here"
+                android:textSize="14sp"
+                android:textColor="@color/text_grey"/>
+
+            <Button
+                android:id="@+id/seeMoreButtonPosting"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/descPosting"
+                android:backgroundTint="@color/blue"
+                android:text="see more"
+                android:textStyle="bold"
+                android:textColor="@color/yellow"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

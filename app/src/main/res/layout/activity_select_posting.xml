@@ -104,7 +104,6 @@
                     android:id="@+id/interestedButton"
                     android:layout_width="160dp"
                     android:layout_height="40dp"
-                    android:layout_marginLeft="5dp"
                     android:backgroundTint="@color/blue"
                     android:text="I'M INTERESTED"
                     android:textStyle="bold"

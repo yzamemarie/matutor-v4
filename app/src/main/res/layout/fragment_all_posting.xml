@@ -7,21 +7,22 @@
     android:background="@color/grey"
     tools:context=".fragments.AllPostingFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postingRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/postingSearchView"/>
-
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/postingSearchView"
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <!--
-    <Spinner
-        android:id="@+id/postingFilterSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/> -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchView"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </RelativeLayout>

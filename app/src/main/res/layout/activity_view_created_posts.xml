@@ -14,7 +14,7 @@
         android:layout_width="330dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/activity_sidebar"
+        app:headerLayout="@layout/sidebar"
         app:menu="@menu/sidemenu"/>
 
     <RelativeLayout
@@ -70,17 +70,24 @@
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/createdPostingSearchView"
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/toolbar"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/createdPostingRecyclerView"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/createdPostingSearchView"
-            android:layout_above="@id/bottom_navigator"/>
+            android:layout_below="@id/searchView"
+            android:layout_above="@id/bottom_navigator">
+
+           <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/searchView"/>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>
 
