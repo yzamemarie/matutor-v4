@@ -11,7 +11,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.view.GravityCompat;
@@ -33,8 +35,9 @@ import com.squareup.picasso.Picasso;
 import kotlinx.coroutines.channels.ChannelResult;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    ActivityDashboardBinding binding;
-    SidebarBinding sidebarBinding;
+    private String userType;
+    private ActivityDashboardBinding binding;
+    private SidebarBinding sidebarBinding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     @Override
@@ -44,13 +47,10 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
-        String userType = pref.getString("user_type", "");
-
         binding.bottomNavigator.setSelectedItemId(R.id.dashboard);
 
         //fetch user's info to display in the sidemenu header
-        //fetchUserInfoHeader();
+        fetchUserInfoHeader();
 
         //FOR DRAWER SIDE MENU
         setSupportActionBar(binding.toolbar);
@@ -137,85 +137,53 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         return false;
     }
 
-    /*
     private void fetchUserInfoHeader() {
+        View headerView = binding.navView.getHeaderView(0);
+        TextView headerFullname = headerView.findViewById(R.id.userFullnameSidebar);
+        TextView headerEmail = headerView.findViewById(R.id.userEmailSidebar);
+        String currentUserEmail = auth.getCurrentUser() != null ? auth.getCurrentUser().getEmail() : null;
+
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             String userEmail = currentUser.getEmail();
 
-            if (!TextUtils.isEmpty(userEmail)) {
-                if (!TextUtils.isEmpty(userEmail)) {
-                    DocumentReference userRef = firestore.collection("all_users")
-                            .document(getUserType(userEmail)) // Use getUserType method to ensure correct type
-                            .collection("users")
-                            .document(userEmail);
+            if (currentUserEmail != null) {
+                SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
+                String userType = pref.getString("user_type", "");
 
-                    userRef.get()
-                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        // Fetch user info
-                                        firestore.collection("all_users")
-                                                .document(getUserType(userEmail)) // Maintain consistent user type retrieval
-                                                .collection("users")
-                                                .document(userEmail)
-                                                .get()
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                        if (documentSnapshot.exists()) {
-                                                            String email = documentSnapshot.getString("userEmail");
-                                                            String firstname = documentSnapshot.getString("userFirstname");
-                                                            String lastname = documentSnapshot.getString("userLastname");
+                DocumentReference userRef = firestore.collection("all_users")
+                        .document(userType)
+                        .collection("users")
+                        .document(userEmail);
 
-                                                            // Display user info in side menu header
-                                                            if (!lastname.isEmpty() && !firstname.isEmpty()) {
-                                                                String fullname = firstname + " " + lastname;
-                                                                sidebarBinding.userFullnameTextView.setText(fullname);
-                                                            } else if (lastname.isEmpty()) {
-                                                                Toast.makeText(getApplicationContext(), "Last name is empty.", Toast.LENGTH_SHORT).show();
-                                                            } else if (firstname.isEmpty()) {
-                                                                Toast.makeText(getApplicationContext(), "First name is empty.", Toast.LENGTH_SHORT).show();
-                                                            }
+                userRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String email = documentSnapshot.getString("userEmail");
+                                    String firstname = documentSnapshot.getString("userFirstname");
+                                    String lastname = documentSnapshot.getString("userLastname");
+                                    String fullname = firstname + " " + lastname;
 
-                                                            if (!email.isEmpty()) {
-                                                                sidebarBinding.userEmailTextView.setText(email);
-                                                            } else {
-                                                                Toast.makeText(getApplicationContext(), "Email does not exist.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } else {
-                                                            // Document does not exist for email within userType collection
-                                                            Toast.makeText(getApplicationContext(), "Document does not exist for email (userType): " + userEmail, Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Toast.makeText(getApplicationContext(), "Error: (document userType)" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                });
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "Document does not exist for email (documentShapshot.exists): " + userEmail, Toast.LENGTH_SHORT).show();
-                                    }
+                                    headerFullname.setText(fullname);
+                                    headerEmail.setText(email);
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Document does not exist for email (documentShapshot.exists): " + userEmail, Toast.LENGTH_SHORT).show();
                                 }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
             }
         }
     }
-
-    private String getUserType(String userEmail) {
-        SharedPreferences preferences = getSharedPreferences("YOUR_PREFERENCES_NAME", MODE_PRIVATE);
-        String userType = preferences.getString("user_type", "learner"); // Use "learner" as default if not set
-        return userType;
-    }
-    */
 
     private void logoutConfirmation () {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

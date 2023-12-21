@@ -6,32 +6,34 @@
     android:layout_height="200dp"
     android:orientation="vertical"
     android:gravity="bottom"
-    android:background="@drawable/sidebar_gradient"
-    tools:context=".Sidebar">
-
-    <ImageView
-        android:id="@+id/userProfilePic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/user_pp"/>
+    android:background="@drawable/sidebar_gradient">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/userFullnameTextView"
+            android:id="@+id/userFullnameSidebar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"
-            android:text="Last"
+            android:text="Yumi Therese Cruz"
             android:textColor="@color/text_grey"
-            android:textSize="24sp"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/userEmailSidebar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:text="yuminotyumi69@email.com"
+            android:textColor="@color/text_grey"
+            android:textSize="20sp"
             android:textStyle="italic"/>
 
     </LinearLayout>
