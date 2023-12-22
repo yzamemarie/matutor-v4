@@ -13,7 +13,6 @@ import com.example.matutor.data.createdPost_data;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.List;
 
 public class createdPost_adapter extends FirestoreRecyclerAdapter<createdPost_data, createdPost_adapter.createdPostHolder> {
 
@@ -37,10 +36,9 @@ public class createdPost_adapter extends FirestoreRecyclerAdapter<createdPost_da
         return new createdPostHolder(view);
     }
 
-    class createdPostHolder extends  RecyclerView.ViewHolder {
+    class createdPostHolder extends  RecyclerView.ViewHolder { //removed postTags
         TextView postTitle;
         TextView postDesc;
-        List<String> postTags;
         TextView userFirstname;
         TextView userLastname;
 
@@ -51,7 +49,6 @@ public class createdPost_adapter extends FirestoreRecyclerAdapter<createdPost_da
             postDesc = itemView.findViewById(R.id.postDescTextViewCP);
             userFirstname = itemView.findViewById(R.id.userFirstnameCP);
             userLastname = itemView.findViewById(R.id.userLastnameCP);
-            postTags = itemView.findViewById(R.id.tagButtonCP);
         }
 
     }

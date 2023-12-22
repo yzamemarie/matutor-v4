@@ -16,24 +16,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class createdPost_model extends ViewModel {
     private String userType;
     private MutableLiveData<List<createdPost_data>> createdPost = new MutableLiveData<>();
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     public LiveData<List<createdPost_data>> getCreatedPosts() {
         return createdPost;
     }
 
-    /*
-    public void loadCreatedPosts () {
+    public void loadCreatedPosts() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String userEmail = currentUser.getEmail();
 
-            firestore.getInstance()
-                    .collection("createdPosts")
+            firestore.collection("createdPosts")
                     .document("createdPost_" + userType)
                     .collection(userEmail)
                     .get()
@@ -47,9 +44,7 @@ public class createdPost_model extends ViewModel {
                             }
                             createdPost.setValue(createdPostList);
                         }
-
                     });
-
         }
-    } */
+    }
 }

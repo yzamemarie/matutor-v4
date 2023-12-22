@@ -32,6 +32,7 @@ public class createdPost_data {
     public List<String> getPostTags() {
         return postTags;
     }
+
     public String getUserFirstname() {
         return userFirstname;
     }
