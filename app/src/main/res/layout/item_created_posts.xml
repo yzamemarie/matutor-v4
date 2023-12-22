@@ -73,14 +73,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tagButtonsFrame"
+                android:id="@+id/tagButtonsFrameCP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="left">
 
                 <Button
-                    android:id="@+id/tagButtonCP"
+                    android:id="@+id/userInterestTagCP"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:backgroundTint="@color/white"
@@ -90,7 +90,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tagButtonsFrame2"
+                android:id="@+id/tagButtonsFrame2CP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

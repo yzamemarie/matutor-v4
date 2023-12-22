@@ -4,12 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityRegisterInfoBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,6 +46,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class RegisterInfo extends AppCompatActivity {
 
@@ -51,9 +63,9 @@ public class RegisterInfo extends AppCompatActivity {
     private static final int SELECT_SELFIE = 5;
     private static final int MAX_TAGS = 5; //max number of tags allowed
     private List<String> tagsList = new ArrayList<>();//string to hold tags
-    private String userType;
+    private String userType = "learner"; //sets default userType to learner. this is only for mobile registration.
 
-    ActivityRegisterInfoBinding binding;
+    private ActivityRegisterInfoBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -133,7 +145,6 @@ public class RegisterInfo extends AppCompatActivity {
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userType = "learner"; //only learners can register through the mobile app
                 
                 //get text from text fields
                 String userFirstname = binding.regFirstnameInput.getText().toString().trim();
@@ -224,11 +235,12 @@ public class RegisterInfo extends AppCompatActivity {
 
                                                         // Upload images to Firestore Storage
                                                         uploadDefaultProfile(userEmail, firestore);
-                                                        uploadImageToFirestore(userEmail, SELECT_ID_FRONT, imageData, idFrontFileName);
-                                                        uploadImageToFirestore(userEmail, SELECT_ID_BACK, imageData, idBackFileName);
-                                                        uploadImageToFirestore(userEmail, SELECT_SELFIE, imageData, selfieFileName);
+                                                        uploadImageToFirestore(userEmail, SELECT_ID_FRONT, imageData, idFrontFileName, "frontIdPicture");
+                                                        uploadImageToFirestore(userEmail, SELECT_ID_BACK, imageData, idBackFileName, "backIdPicture");
+                                                        uploadImageToFirestore(userEmail, SELECT_SELFIE, imageData, selfieFileName, "selfiePicture");
 
                                                         Toast.makeText(getApplicationContext(), "Learner has successfully registered!", Toast.LENGTH_SHORT).show();
+                                                        sendConfirmationEmails(userEmail, userType);
                                                     })
                                                     .addOnFailureListener(e -> {
                                                         Toast.makeText(getApplicationContext(), "Error: (all_user)" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -285,6 +297,108 @@ public class RegisterInfo extends AppCompatActivity {
         });
         builder.show();
     }
+
+    public void sendConfirmationEmails(String userEmail, String userType) {
+        DocumentReference userRef = firestore.collection("all_users")
+                .document(userType)
+                .collection("users")
+                .document(userEmail);
+
+        userRef.get().addOnSuccessListener(userSnapshot -> {
+            String userGuardianEmail = userSnapshot.getString("userGuardianEmail");
+
+            String userSubject = "Welcome to MaTutor!";
+            String userBody = "Hi " + userSnapshot.getString("userFirstname") + ",\n\nYou've successfully created an account on MaTutor! We're excited to help you learn and connect with great tutors.\n\nStart exploring MaTutor by searching for tutors, scheduling lessons, and joining engaging learning communities.\n\nHappy learning!\n\nThe MaTutor Team";
+
+            String guardianSubject = "Your child has created an account on MaTutor!";
+            String guardianBody = "Hi " + userSnapshot.getString("userGuardianName") + ",\n\nYour child, " + userSnapshot.getString("userFirstname") + ", has created an account on MaTutor! MaTutor is a platform that connects students with professional tutors for online learning.\n\nAs a guardian, you can stay informed about your child's learning journey by accessing their learning progress and activity reports.\n\nIf you have any questions, please feel free to contact us at [support email address].\n\nBest regards,\n\nThe MaTutor Team";
+
+            // Send confirmation email to user
+            new SendMailTask(this, userEmail, "your_app_password", userEmail, userEmail, userSubject, userBody).execute();
+
+            // Send confirmation email to guardian
+            if (!userGuardianEmail.isEmpty()) {
+                new SendMailTask(this, userEmail, "your_app_password", userEmail, userGuardianEmail, guardianSubject, guardianBody).execute();
+            } else {
+                Toast.makeText(getApplicationContext(), "No guardian email found for user", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public class SendMailTask extends AsyncTask<Void, Void, Void> {
+
+        private static final String HOST = "smtp.gmail.com";
+        private static final int PORT = 465;
+        private static final String AUTH_PROTOCOL = "smtps";
+        private static final boolean DEBUG = false; // Set to true for debugging logs
+
+        private Context context;
+        private String fromEmail;
+        private String appPassword;
+        private String toEmail;
+        private String ccEmail; // Optional email address for recipient copy
+        private String subject;
+        private String body;
+
+        public SendMailTask(Context context, String fromEmail, String appPassword,
+                            String toEmail, String ccEmail, String subject, String body) {
+            this.context = context;
+            this.fromEmail = fromEmail;
+            this.appPassword = appPassword;
+            this.toEmail = toEmail;
+            this.ccEmail = ccEmail;
+            this.subject = subject;
+            this.body = body;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                // Set mail server properties
+                Properties props = new Properties();
+                props.put("mail.smtp.host", HOST);
+                props.put("mail.smtp.socketFactory.port", PORT);
+                props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                props.put("mail.smtp.auth", "true");
+                props.put("mail.smtp.port", PORT);
+                props.put("mail.smtp.starttls.enable", true);
+                props.put("mail.debug", DEBUG); // Enable debug logging if needed
+
+                // Create a session with authentication
+                Session session = Session.getInstance(props,
+                        new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(fromEmail, appPassword);
+                            }
+                        });
+
+                // Create a MimeMessage object
+                MimeMessage mimeMessage = new MimeMessage(session);
+                mimeMessage.setFrom(new InternetAddress(fromEmail));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+                if (!ccEmail.isEmpty()) {
+                    mimeMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(ccEmail));
+                }
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(body);
+
+                // Send the email
+                Transport.send(mimeMessage);
+
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(context, "Confirmation emails sent successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     private void updateTagButtons() {
         LinearLayout tagButtonsFrame = findViewById(R.id.tagButtonsFrame);
@@ -343,7 +457,10 @@ public class RegisterInfo extends AppCompatActivity {
     private void uploadDefaultProfile(String userEmail, FirebaseFirestore firestore) {
         int defaultProfilePictureResourceId = R.drawable.user_pp;
         Uri defaultProfilePictureUri = Uri.parse("android.resource://" + getPackageName() + "/" + defaultProfilePictureResourceId);
-        StorageReference storageRef = storage.getReference().child("profile_pictures/" + userEmail + "/user_pp.png");
+        StorageReference storageRef = storage.getReference()
+                .child("profile_pictures")
+                .child(userEmail)
+                .child("user_pp.png");
         UploadTask uploadTask = storageRef.putFile(defaultProfilePictureUri);
 
         uploadTask.addOnSuccessListener(taskSnapshot -> updateProfilePictureInFirestore(userEmail, firestore))
@@ -357,9 +474,9 @@ public class RegisterInfo extends AppCompatActivity {
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             String downloadUrl = uri.toString();
             DocumentReference userRef = firestore.collection("all_users")
-                    .document(userType) // Use userType variable here
-                    .collection("users") // Add "users" subcollection
-                    .document(userEmail); // Use userEmail variable here
+                    .document(userType)
+                    .collection("users")
+                    .document(userEmail);
             userRef.update("userProfilePicture", downloadUrl)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getApplicationContext(), "Successfully updated to Firestore ", Toast.LENGTH_SHORT).show();
@@ -471,8 +588,10 @@ public class RegisterInfo extends AppCompatActivity {
         }
     }
 
-    private void uploadImageToFirestore(String userEmail, int perm, Intent data, String fileName) {
-        StorageReference storageRef = storage.getReference().child(userEmail);
+    private void uploadImageToFirestore(String userEmail, int perm, Intent data, String fileName, String folderName) {
+        StorageReference storageRef = storage.getReference()
+                .child(userEmail)
+                .child(getFolderNameForPermission(perm));
         UploadTask uploadTask = storageRef.putFile(getImageUri(perm, data, fileName));
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
@@ -496,12 +615,12 @@ public class RegisterInfo extends AppCompatActivity {
 
                 if (!updateFieldImageUri.isEmpty()) {
                     DocumentReference userRef = firestore.collection("all_users")
-                            .document(userType) // Use userType variable instead of "user_learner"
-                            .collection("users") // Add "users" subcollection
-                            .document(userEmail); // Use learnerEmail variable
+                            .document(userType)
+                            .collection("users")
+                            .document(userEmail);
                     userRef.update(updateFieldImageUri, imageUri)
                             .addOnSuccessListener(aVoid -> {
-                                // Image URL updated successfully in Firestore
+                                Toast.makeText(getApplicationContext(), "Successfully uploaded images to FirebaseStorage! (uploadImageToFirestore)", Toast.LENGTH_SHORT).show();
                             })
                             .addOnFailureListener(e -> {
                                 // Handle the case where the image URL update fails
@@ -511,6 +630,19 @@ public class RegisterInfo extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(getApplicationContext(), "Error uploading image: (uploadImageToFirestore)" + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private String getFolderNameForPermission(int perm) {
+        switch (perm) {
+            case SELECT_ID_FRONT:
+                return "frontIdPicture";
+            case SELECT_ID_BACK:
+                return "backIdPicture";
+            case SELECT_SELFIE:
+                return "selfiePicture";
+            default:
+                return "";
+        }
     }
 
     private Uri getImageUri(int perm, Intent data, String fileName) {
