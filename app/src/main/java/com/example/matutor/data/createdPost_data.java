@@ -40,4 +40,5 @@ public class createdPost_data {
     public String getUserLastname() {
         return userLastname;
     }
+
 }

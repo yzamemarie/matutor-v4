@@ -69,7 +69,6 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
 
         // Initialize ViewModel
         createdPostModel = new ViewModelProvider(this).get(createdPost_model.class);
-
         setUpRecyclerView();
 
         binding.bottomNavigator.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

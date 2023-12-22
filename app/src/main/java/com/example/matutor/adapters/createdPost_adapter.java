@@ -27,7 +27,6 @@ public class createdPost_adapter extends FirestoreRecyclerAdapter<createdPost_da
         holder.postDesc.setText(model.getPostDesc());
         holder.userFirstname.setText(model.getUserFirstname());
         holder.userLastname.setText(model.getUserLastname());
-
     }
 
     @Override
