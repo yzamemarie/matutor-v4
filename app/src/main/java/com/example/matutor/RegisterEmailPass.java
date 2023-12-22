@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityRegisterEmailPassBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterEmailPass extends AppCompatActivity {
 
-    ActivityRegisterEmailPassBinding binding;
+    private ActivityRegisterEmailPassBinding binding;
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +38,26 @@ public class RegisterEmailPass extends AppCompatActivity {
                 } else if (!getConfirm.equals(getPassword)) {
                     Toast.makeText(getApplicationContext(), "Passwords do not match. Please enter again.", Toast.LENGTH_SHORT).show();
                 } else {
-                    //Pass data to second activity
-                    Intent intent = new Intent(getApplicationContext(), RegisterInfo.class);
-                    intent.putExtra("Email", getEmail);
-                    intent.putExtra("Password", getPassword);
-                    intent.putExtra("Confirm Password", getConfirm);
-                    startActivity(intent);
+                    firestore.collection("all_users")
+                            .document("learner")  // Using default userType "learner"
+                            .collection("users")
+                            .document(getEmail)
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    Toast.makeText(getApplicationContext(), "Email already exists. Please try a different one.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // Email doesn't exist, proceed to next activity
+                                    Intent intent = new Intent(getApplicationContext(), RegisterInfo.class);
+                                    intent.putExtra("Email", getEmail);
+                                    intent.putExtra("Password", getPassword);
+                                    intent.putExtra("Confirm Password", getConfirm);
+                                    startActivity(intent);
+                                }
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getApplicationContext(), "Error checking email existence: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 }
 
             }
