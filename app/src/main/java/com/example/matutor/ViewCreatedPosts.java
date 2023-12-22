@@ -5,41 +5,49 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.matutor.adapters.createdPost_adapter;
+import com.example.matutor.data.createdPost_data;
 import com.example.matutor.databinding.ActivityViewCreatedPostsBinding;
+import com.example.matutor.databinding.ItemCreatedPostsBinding;
+import com.example.matutor.models.createdPost_model;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import models.createPost_model;
+import com.google.firebase.firestore.Query;
 
 public class ViewCreatedPosts extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private createdPost_adapter postAdapter;
-    ActivityViewCreatedPostsBinding binding;
+    private String userType;
+    private createdPost_adapter adapter;
+    private ActivityViewCreatedPostsBinding binding;
+    private ItemCreatedPostsBinding itemBinding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
         binding = ActivityViewCreatedPostsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
+        userType = pref.getString("user_type", "");
 
         binding.bottomNavigator.setSelectedItemId(R.id.dashboard);
 
@@ -52,44 +60,7 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
         toggle.syncState();
         binding.navView.setNavigationItemSelectedListener(this);
 
-        // Initialize the RecyclerView and set the adapter
-        binding.createdPostingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        postAdapter = new createdPost_adapter(new ArrayList<>());
-        binding.createdPostingRecyclerView.setAdapter(postAdapter);
-
-
-        // Fetch and display the created post data
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String learnerEmail = currentUser.getEmail();
-
-            // Creating a reference to the learner's collection in "createdPost_learner"
-            CollectionReference createdPostCollection = FirebaseFirestore.getInstance()
-                    .collection("createdPost_learner")
-                    .document(learnerEmail)
-                    .collection("created_posts");
-
-            // Fetching created posts from Firestore
-            createdPostCollection.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<createPost_model> createdPostList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        // Convert each document to a createPost_model object
-                        createPost_model post = document.toObject(createPost_model.class);
-                        createdPostList.add(post);
-                    }
-
-                    // Set the created post data to the RecyclerView adapter
-                    postAdapter.setCreatedPostList(createdPostList);
-                } else {
-                    // Handle the error
-                    Toast.makeText(this, "Error fetching created posts", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            // Handle the case where the user is not authenticated
-            Toast.makeText(this, "User not authenticated. (ViewCreatedPost)", Toast.LENGTH_SHORT).show();
-        }
+        setUpRecyclerView();
 
         binding.bottomNavigator.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -122,6 +93,47 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
                 return false;
             }
         });
+    }
+
+    private void setUpRecyclerView() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userEmail = currentUser.getEmail();
+
+            CollectionReference createdPostRef = firestore.getInstance()
+                    .collection("createdPosts")
+                    .document("createdPost_" + userType)
+                    .collection(userEmail);
+
+            Query query = createdPostRef.orderBy("userEmail", Query.Direction.DESCENDING);
+
+            FirestoreRecyclerOptions<createdPost_data> options = new FirestoreRecyclerOptions.Builder<createdPost_data>()
+                    .setQuery(query, createdPost_data.class)
+                    .setLifecycleOwner(this) // For automatic lifecycle management
+                    .build();
+
+            adapter =  new createdPost_adapter(options);
+
+            binding.recyclerView.setHasFixedSize(true);
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            binding.recyclerView.setAdapter(adapter);
+
+        } else {
+            Toast.makeText(this, "User not authenticated. (ViewCreatedPost, setUpRecyclerView)", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void deleteConfirmation() {

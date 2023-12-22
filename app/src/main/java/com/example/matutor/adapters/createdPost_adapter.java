@@ -1,83 +1,58 @@
 package com.example.matutor.adapters;
 
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.matutor.R;
-import com.example.matutor.databinding.ListCreatedPostsBinding;
+import com.example.matutor.data.createdPost_data;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.List;
 
-import models.createPost_model;
+public class createdPost_adapter extends FirestoreRecyclerAdapter<createdPost_data, createdPost_adapter.createdPostHolder> {
 
-public class createdPost_adapter extends RecyclerView.Adapter<createdPost_adapter.PostViewHolder> {
-    private List<createPost_model> createdPostList;
-    static class PostViewHolder extends RecyclerView.ViewHolder {
-        private final ListCreatedPostsBinding createBinding;
+    public createdPost_adapter(@NonNull FirestoreRecyclerOptions<createdPost_data> options) {
+        super(options);
 
-        PostViewHolder(ListCreatedPostsBinding createBinding) {
-            super(createBinding.getRoot());
-            this.createBinding = createBinding;
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull createdPostHolder holder, int position, @NonNull createdPost_data model) {
+        holder.postTitle.setText(model.getPostTitle());
+        holder.postDesc.setText(model.getPostDesc());
+        holder.userFirstname.setText(model.getUserFirstname());
+        holder.userLastname.setText(model.getUserLastname());
+
+    }
+
+    @Override
+    public createdPostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_created_posts, parent, false);
+        return new createdPostHolder(view);
+    }
+
+    class createdPostHolder extends  RecyclerView.ViewHolder {
+        TextView postTitle;
+        TextView postDesc;
+        List<String> postTags;
+        TextView userFirstname;
+        TextView userLastname;
+
+        public createdPostHolder(@NonNull View itemView) {
+            super(itemView);
+
+            postTitle = itemView.findViewById(R.id.postTitleTextViewCP);
+            postDesc = itemView.findViewById(R.id.postDescTextViewCP);
+            userFirstname = itemView.findViewById(R.id.userFirstnameCP);
+            userLastname = itemView.findViewById(R.id.userLastnameCP);
+            postTags = itemView.findViewById(R.id.tagButtonCP);
         }
 
-        public void bind(createPost_model post) {
-            createBinding.postTitleTextView.setText(post.getPostTitle());
-            createBinding.postDescTextView.setText(post.getPostDescription());
-            createBinding.userFirstName.setText(post.getLearnerFirstname());
-            createBinding.userLastName.setText(post.getLearnerLastname());
-
-            // Set tags
-            for (String tag : post.getPostTags()) {
-                Button tagButton = new Button(createBinding.getRoot().getContext());
-                tagButton.setText(tag);
-                tagButton.setBackgroundResource(R.color.white);
-                tagButton.setTextColor(ContextCompat.getColor(createBinding.getRoot().getContext(), android.R.color.darker_gray));
-                tagButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                createBinding.tagButtonsFrame2.addView(tagButton);
-            }
-
-            // Set an OnClickListener for the close button (if needed)
-            createBinding.closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Handle button click if needed
-                }
-            });
-        }
-    }
-
-    public createdPost_adapter(List<createPost_model> createdPostList) {
-        this.createdPostList = createdPostList;
-    }
-
-    @NonNull
-    @Override
-    public createdPost_adapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ListCreatedPostsBinding createBinding = ListCreatedPostsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new PostViewHolder(createBinding);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull createdPost_adapter.PostViewHolder holder, int position) {
-        createPost_model post = createdPostList.get(position);
-        holder.bind(post);
-    }
-
-    @Override
-    public int getItemCount() {
-        return createdPostList.size();
-    }
-
-    // Method to set the created post list and notify data set changed
-    public void setCreatedPostList(List<createPost_model> createdPostList) {
-        this.createdPostList = createdPostList;
-        notifyDataSetChanged();
     }
 }
