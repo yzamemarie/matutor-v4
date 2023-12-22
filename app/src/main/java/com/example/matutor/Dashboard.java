@@ -30,14 +30,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
-
-import kotlinx.coroutines.channels.ChannelResult;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private String userType;
     private ActivityDashboardBinding binding;
-    private SidebarBinding sidebarBinding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     @Override
@@ -49,7 +45,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
         binding.bottomNavigator.setSelectedItemId(R.id.dashboard);
 
-        //fetch user's info to display in the sidemenu header
         fetchUserInfoHeader();
 
         //FOR DRAWER SIDE MENU
@@ -185,6 +180,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
+
+
     private void logoutConfirmation () {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Logout Session");
@@ -227,8 +224,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
+                dialog.dismiss();
+            }
         });
         builder.show();
     }
