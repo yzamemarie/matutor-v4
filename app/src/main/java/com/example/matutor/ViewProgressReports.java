@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +11,16 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.matutor.databinding.ActivityBookingsHistoryBinding;
+import com.example.matutor.databinding.ActivityViewProgressReportsBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,19 +28,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class BookingsHistory extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ViewProgressReports extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ActivityBookingsHistoryBinding binding;
+    private ActivityViewProgressReportsBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
-        binding = ActivityBookingsHistoryBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        binding.bottomNavigator.setSelectedItemId(R.id.dashboard);
+        setContentView(R.layout.activity_view_progress_reports);
 
         fetchUserInfoHeader();
 
@@ -51,8 +51,7 @@ public class BookingsHistory extends AppCompatActivity implements NavigationView
         toggle.syncState();
         binding.navView.setNavigationItemSelectedListener(this);
 
-
-
+        //navbar navigation
         binding.bottomNavigator.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -84,22 +83,9 @@ public class BookingsHistory extends AppCompatActivity implements NavigationView
                 return false;
             }
         });
-    }
-    
-
-    @Override
-    public void onBackPressed() {
-        //to avoid closing the application on back press
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            finish();
-        }
 
     }
+
 
     private void fetchUserInfoHeader() {
         View headerView = binding.navView.getHeaderView(0);
@@ -164,7 +150,14 @@ public class BookingsHistory extends AppCompatActivity implements NavigationView
         builder.show();
     }
 
-    //sidemenu
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Posting.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
+        finish();
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -207,5 +200,4 @@ public class BookingsHistory extends AppCompatActivity implements NavigationView
         }
         return false;
     }
-
 }

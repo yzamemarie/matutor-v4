@@ -225,7 +225,9 @@ public class EditProfile extends AppCompatActivity implements NavigationView.OnN
                     FirebaseUser currentUser = auth.getCurrentUser();
                     if (currentUser != null) {
                         String userEmail = currentUser.getEmail();
-                        firestore.collection("user_user")
+                        firestore.collection("all_users")
+                                .document(userType)
+                                .collection("users")
                                 .document(userEmail)
                                 .delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -570,6 +572,7 @@ public class EditProfile extends AppCompatActivity implements NavigationView.OnN
         }
         return null; // Return null if URI retrieval fails or if perm is not recognized
     }
+
     private void displayImagePreview(int perm, Intent data) {
         if (data != null && data.getData() != null) {
             // Display the selected image in the corresponding ImageView

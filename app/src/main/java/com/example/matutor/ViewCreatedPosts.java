@@ -14,7 +14,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.matutor.adapters.createdPost_adapter;
@@ -23,11 +25,15 @@ import com.example.matutor.databinding.ActivityViewCreatedPostsBinding;
 import com.example.matutor.databinding.ItemCreatedPostsBinding;
 import com.example.matutor.models.createdPost_model;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -50,6 +56,8 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
         userType = pref.getString("user_type", "");
 
         binding.bottomNavigator.setSelectedItemId(R.id.dashboard);
+
+        fetchUserInfoHeader();
 
         //FOR DRAWER SIDE MENU
         setSupportActionBar(binding.toolbar);
@@ -158,6 +166,70 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
         builder.show();
     }
 
+
+    private void fetchUserInfoHeader() {
+        View headerView = binding.navView.getHeaderView(0);
+        TextView headerFullname = headerView.findViewById(R.id.userFullnameSidebar);
+        TextView headerEmail = headerView.findViewById(R.id.userEmailSidebar);
+        String currentUserEmail = auth.getCurrentUser() != null ? auth.getCurrentUser().getEmail() : null;
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userEmail = currentUser.getEmail();
+
+            if (currentUserEmail != null) {
+                SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
+                String userType = pref.getString("user_type", "");
+
+                DocumentReference userRef = firestore.collection("all_users")
+                        .document(userType)
+                        .collection("users")
+                        .document(userEmail);
+
+                userRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String email = documentSnapshot.getString("userEmail");
+                                    String firstname = documentSnapshot.getString("userFirstname");
+                                    String lastname = documentSnapshot.getString("userLastname");
+                                    String fullname = firstname + " " + lastname;
+
+                                    headerFullname.setText(fullname);
+                                    headerEmail.setText(email);
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Document does not exist for email (documentShapshot.exists): " + userEmail, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+            }
+        }
+    }
+
+    private void logoutConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout Session");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            auth.getInstance().signOut();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
+    }
+
     @Override
     public void onBackPressed() {
         //to avoid closing the application on back press
@@ -214,18 +286,4 @@ public class ViewCreatedPosts extends AppCompatActivity implements NavigationVie
         return false;
     }
 
-    private void logoutConfirmation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Logout Session");
-        builder.setMessage("Are you sure you want to logout?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            auth.getInstance().signOut();
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
-        builder.setNegativeButton("No", null);
-        builder.show();
-    }
 }
