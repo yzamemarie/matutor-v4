@@ -1,6 +1,7 @@
 package com.example.matutor;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -10,6 +11,7 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -28,6 +30,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.matutor.databinding.ActivityEditProfileBinding;
@@ -36,6 +39,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -56,19 +60,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
-public class EditProfile extends AppCompatActivity {
+public class EditProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int SELECT_PROFILE_IMAGE = 1;
     private static final int MAX_TAGS = 5;
-
     private List<String> tagsList = new ArrayList<>();
-
-    ActivityEditProfileBinding binding;
+    private String userType;
+    private ActivityEditProfileBinding binding;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -81,6 +81,23 @@ public class EditProfile extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // removes status bar
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //FOR DRAWER SIDE MENU
+        setSupportActionBar(binding.toolbar);
+        //NAV MENU
+        binding.navView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.drawer_open, R.string.drawer_close);
+        binding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        binding.navView.setNavigationItemSelectedListener(this);
+
+        //fetch user's info to display in the sidemenu header
+        fetchUserInfoHeader();
+
+        // Get email intent from Profile activity
+        Intent intent = getIntent();
+        String getEmail = intent.getStringExtra("Email");
+        binding.editEmailInput.setText(getEmail);
 
         // Populate the Spinner using a loop
         List<String> items = new ArrayList<>();
@@ -127,9 +144,9 @@ public class EditProfile extends AppCompatActivity {
             public void onClick(View view) {
                 FirebaseUser currentUser = auth.getCurrentUser();
                 if (currentUser != null) {
-                    String learnerEmail = currentUser.getEmail();
+                    String userEmail = currentUser.getEmail();
 
-                    binding.editEmailInput.setText(learnerEmail);
+                    binding.editEmailInput.setText(userEmail);
 
                     // Extract new values from the input fields
                     String newFirstName = binding.editFirstnameInput.getText().toString().trim();
@@ -145,40 +162,43 @@ public class EditProfile extends AppCompatActivity {
                     String newConfirmPassword = binding.editConfirmPasswordInput.getText().toString().trim();
 
                     // Get a reference to the user document in Firestore
-                    DocumentReference learnerReference = firestore.collection("user_learner").document(learnerEmail);
+                    DocumentReference userRef = firestore.collection("all_users")
+                            .document(userType)
+                            .collection("users")
+                            .document(userEmail);
 
                     // Update each field individually
-                    learnerReference.update("tags", tagsList);
+                    userRef.update("tags", tagsList);
 
                     if (!newFirstName.isEmpty()) {
-                        learnerReference.update("learnerFirstname", newFirstName);
+                        userRef.update("userFirstname", newFirstName);
                     }
                     if (!newLastName.isEmpty()) {
-                        learnerReference.update("learnerLastname", newLastName);
+                        userRef.update("userLastname", newLastName);
                     }
                     if (!newAbout.isEmpty()) {
-                        learnerReference.update("learnerAbout", newAbout);
+                        userRef.update("userAbout", newAbout);
                     }
                     if (!newBirthdate.isEmpty()) {
-                        learnerReference.update("learnerBdate", newBirthdate);
+                        userRef.update("userBdate", newBirthdate);
                     }
                     if (!newAge.isEmpty()) {
-                        learnerReference.update("learnerAge", newAge);
+                        userRef.update("userAge", newAge);
                     }
                     if (!newAddress.isEmpty()) {
-                        learnerReference.update("learnerAddress", newAddress);
+                        userRef.update("userAddress", newAddress);
                     }
                     if (!newContact.isEmpty()) {
-                        learnerReference.update("learnerContact", newContact);
+                        userRef.update("userContact", newContact);
                     }
                     if (!newGuardianName.isEmpty()) {
-                        learnerReference.update("learnerGuardianName", newGuardianName);
+                        userRef.update("userGuardianName", newGuardianName);
                     }
                     if (!newGuardianEmail.isEmpty()) {
-                        learnerReference.update("learnerGuardianEmail", newGuardianEmail);
+                        userRef.update("userGuardianEmail", newGuardianEmail);
                     }
                     if (!newPassword.isEmpty() && !newConfirmPassword.isEmpty() && newConfirmPassword.equals(newPassword)) {
-                        learnerReference.update("learnerPassword", newPassword);
+                        userRef.update("userPassword", newPassword);
                     }
 
 
@@ -204,9 +224,9 @@ public class EditProfile extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     FirebaseUser currentUser = auth.getCurrentUser();
                     if (currentUser != null) {
-                        String learnerEmail = currentUser.getEmail();
-                        firestore.collection("user_learner")
-                                .document(learnerEmail)
+                        String userEmail = currentUser.getEmail();
+                        firestore.collection("user_user")
+                                .document(userEmail)
                                 .delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -248,98 +268,196 @@ public class EditProfile extends AppCompatActivity {
         });
     }
 
-        @Override
-        public void onBackPressed () {
-            Intent intent = new Intent(getApplicationContext(), Profile.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
-            finish();
-        }
+    private void fetchUserInfoHeader() {
+        View headerView = binding.navView.getHeaderView(0);
+        TextView headerFullname = headerView.findViewById(R.id.userFullnameSidebar);
+        TextView headerEmail = headerView.findViewById(R.id.userEmailSidebar);
+        String currentUserEmail = auth.getCurrentUser() != null ? auth.getCurrentUser().getEmail() : null;
 
-        private void updateTagButtons() {
-            LinearLayout tagButtonsFrame = findViewById(R.id.tagButtonsFrame);
-            LinearLayout tagButtonsFrame2 = findViewById(R.id.tagButtonsFrame2);
-            tagButtonsFrame.removeAllViews();
-            tagButtonsFrame2.removeAllViews();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userEmail = currentUser.getEmail();
 
-            int maxButtonsPerRow = 3;
+            if (currentUserEmail != null) {
+                SharedPreferences pref = getSharedPreferences("user_type", MODE_PRIVATE);
+                String userType = pref.getString("user_type", "");
 
-            for (int i = 0; i < Math.min(tagsList.size(), 5); i++) {
-                LinearLayout targetLayout = (i < maxButtonsPerRow) ? tagButtonsFrame : tagButtonsFrame2;
+                DocumentReference userRef = firestore.collection("all_users")
+                        .document(userType)
+                        .collection("users")
+                        .document(userEmail);
 
-                Button tagButton = new Button(this);
-                tagButton.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                ));
-                tagButton.setText(tagsList.get(i));
-                tagButton.setTextColor(getResources().getColor(android.R.color.darker_gray));
-                tagButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                tagButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                userRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String email = documentSnapshot.getString("userEmail");
+                                    String firstname = documentSnapshot.getString("userFirstname");
+                                    String lastname = documentSnapshot.getString("userLastname");
+                                    String fullname = firstname + " " + lastname;
 
-                tagButton.setId(View.generateViewId());
+                                    headerFullname.setText(fullname);
+                                    headerEmail.setText(email);
 
-                tagButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tagsList.remove(tagButton.getText().toString());
-                        updateTagButtons();
-                    }
-                });
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Document does not exist for email (documentShapshot.exists): " + userEmail, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                targetLayout.addView(tagButton);
             }
-
-            binding.editTagText.setText("");
         }
+    }
 
-        private void showDatePickerDialog() {
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+    //sidemenu
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    this,
-                    (view, yearSelected, monthOfYear, dayOfMonth) -> {
-                        String selectedDate = (monthOfYear + 1) + "/" + dayOfMonth + "/" + yearSelected;
-                        binding.editDateText.setText(selectedDate);
-                    },
-                    year, month, day);
-
-            datePickerDialog.show();
+        if (itemId == R.id.side_dashboard) {
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+            return true;
         }
+        else if (itemId == R.id.side_profile) {
+            startActivity(new Intent(getApplicationContext(), Profile.class));
+            return true;
+        }
+        else if (itemId == R.id.side_progReports) {
+            startActivity(new Intent(getApplicationContext(), ViewProgressReports.class));
+            return true;
+        }
+        else if (itemId == R.id.side_yourPostings) {
+            startActivity(new Intent(getApplicationContext(), ViewCreatedPosts.class));
+            return true;
+        }
+        else if (itemId == R.id.side_yourBookings) {
+            startActivity(new Intent(getApplicationContext(), Bookings.class));
+            return true;
+        }
+        else if (itemId == R.id.side_yourReviews) {
+            startActivity(new Intent(getApplicationContext(), ReviewsHistory.class));
+            return true;
+        }
+        else if (itemId == R.id.side_yourHistory) {
+            startActivity(new Intent(getApplicationContext(), BookingsHistory.class));
+            return true;
+        }
+        else if (itemId == R.id.side_help) {
+            //create help smth
+            return true;
+        }
+        else if (itemId == R.id.side_logout) {
+            logoutConfirmation();
+            return true;
+        }
+        return false;
+    }
 
-        private void openPickerDialog(int perm) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select Source");
-            builder.setItems(new CharSequence[]{"Camera", "Gallery"}, new DialogInterface.OnClickListener() {
+    private void logoutConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout Session");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            auth.getInstance().signOut();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
+    }
+
+    private void updateTagButtons() {
+        LinearLayout tagButtonsFrame = findViewById(R.id.tagButtonsFrame);
+        LinearLayout tagButtonsFrame2 = findViewById(R.id.tagButtonsFrame2);
+        tagButtonsFrame.removeAllViews();
+        tagButtonsFrame2.removeAllViews();
+
+        int maxButtonsPerRow = 3;
+
+        for (int i = 0; i < Math.min(tagsList.size(), 5); i++) {
+            LinearLayout targetLayout = (i < maxButtonsPerRow) ? tagButtonsFrame : tagButtonsFrame2;
+
+            Button tagButton = new Button(this);
+            tagButton.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tagButton.setText(tagsList.get(i));
+            tagButton.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tagButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+            tagButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+
+            tagButton.setId(View.generateViewId());
+
+            tagButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int choice) {
-                    switch (choice) {
-                        case 0:
-                            openCamera(perm);
-                            break;
-                        case 1:
-                            openGallery(perm);
-                            break;
-                    }
+                public void onClick(View v) {
+                    tagsList.remove(tagButton.getText().toString());
+                    updateTagButtons();
                 }
             });
-            builder.show();
+
+            targetLayout.addView(tagButton);
         }
 
-        private void openCamera(int perm) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, perm);
+        binding.editTagText.setText("");
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, yearSelected, monthOfYear, dayOfMonth) -> {
+                    String selectedDate = (monthOfYear + 1) + "/" + dayOfMonth + "/" + yearSelected;
+                    binding.editDateText.setText(selectedDate);
+                }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void openPickerDialog(int perm) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Source");
+        builder.setItems(new CharSequence[]{"Camera", "Gallery"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int choice) {
+                switch (choice) {
+                    case 0:
+                        openCamera(perm);
+                        break;
+                    case 1:
+                        openGallery(perm);
+                        break;
+                }
             }
-        }
+        });
+        builder.show();
+    }
 
-        private void openGallery(int perm) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    private void openCamera(int perm) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, perm);
         }
+    }
+
+    private void openGallery(int perm) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, perm);
+    }
 
     private void displayImageFileName(int perm, String fileName) {
         switch (perm) {
@@ -403,8 +521,8 @@ public class EditProfile extends AppCompatActivity {
         }
     }
 
-    private void uploadImageToFirestore(String learnerEmail, int perm, Intent data, String fileName) {
-        StorageReference storageRef = storage.getReference().child(learnerEmail);
+    private void uploadImageToFirestore(String userEmail, int perm, Intent data, String fileName) {
+        StorageReference storageRef = storage.getReference().child(userEmail);
         UploadTask uploadTask = storageRef.putFile(getImageUri(perm, data, fileName));
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
@@ -421,7 +539,7 @@ public class EditProfile extends AppCompatActivity {
                 }
 
                 if (!updateFieldImageUri.isEmpty()) {
-                    DocumentReference userRef = firestore.collection("user_learner").document(learnerEmail);
+                    DocumentReference userRef = firestore.collection("user_user").document(userEmail);
                     userRef.update(updateFieldImageUri, imageUri)
                             .addOnSuccessListener(aVoid -> {
                                 // Image URL updated successfully in Firestore
@@ -500,4 +618,13 @@ public class EditProfile extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(getApplicationContext(), Profile.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
+        finish();
+    }
+
 }
