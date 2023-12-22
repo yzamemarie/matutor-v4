@@ -86,7 +86,6 @@ public class ViewProgressReports extends AppCompatActivity implements Navigation
 
     }
 
-
     private void fetchUserInfoHeader() {
         View headerView = binding.navView.getHeaderView(0);
         TextView headerFullname = headerView.findViewById(R.id.userFullnameSidebar);
